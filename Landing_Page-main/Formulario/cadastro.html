@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Voluntário</title>
+    <link rel="stylesheet" href="styleCADAS.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="../Imagens/icone_logo.png" type="image/x-icon">
+</head>
+<body>
+  <div class="container-principal">
+      <h1 class="header-title">Registro de Voluntário</h1>
+      <p class="subtitle">
+          Preencha todos os campos obrigatórios (*) para completar seu cadastro no Grupo Amparo e Alívio.
+      </p>
+
+      <form id="voluntarioForm">
+          <div class="section">
+              <h2>1. Dados Pessoais e Profissionais</h2>
+              
+              <div class="input-group">
+                  <div class="form-group col-span-full">
+                      <label for="nome">Nome Completo *</label>
+                      <input type="text" id="nome" name="nome" required class="input-field">
+                  </div>
+
+                  <div class="form-group">
+                      <label for="profissao">Profissão *</label>
+                      <input type="text" id="profissao" name="profissao" required class="input-field">
+                  </div>
+
+                  <div class="form-group">
+                      <label for="registro_conselho">Registro no Conselho (CRM, CRP etc.)</label>
+                      <input type="text" id="registro_conselho" name="registro_conselho" class="input-field">
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="rg">RG *</label>
+                      <input type="text" id="rg" name="rg" required class="input-field">
+                  </div>
+                  
+                  <div class="form-group">
+                      <label for="cpf">CPF *</label>
+                      <input type="text" id="cpf" name="cpf" required class="input-field">
+                  </div>
+              </div>
+          </div>
+
+          <div class="section">
+              <h2>2. Contatos</h2>
+              
+              <div class="input-group input-group-contact">
+                  <div class="form-group">
+                      <label for="telefone_pessoal">Telefone Pessoal (Celular) *</label>
+                      <input type="tel" id="telefone_pessoal" name="telefone_pessoal" required class="input-field">
+                  </div>
+
+                  <div class="form-group">
+                      <label for="telefone_residencial">Telefone Residencial</label>
+                      <input type="tel" id="telefone_residencial" name="telefone_residencial" class="input-field">
+                  </div>
+
+                  <div class="form-group">
+                      <label for="telefone_consultorio">Telefone do Consultório</label>
+                      <input type="tel" id="telefone_consultorio" name="telefone_consultorio" class="input-field">
+                  </div>
+              </div>
+          </div>
+
+          <div class="section">
+              <h2>3. Endereço</h2>
+              
+              <div class="input-group input-group-address">
+                  <div class="form-group">
+                      <label for="cep">CEP *</label>
+                      <input type="text" id="cep" name="cep" required class="input-field">
+                  </div>
+                  
+                  <div class="form-group col-span-full col-span-3-md">
+                      <label for="logradouro">Logradouro *</label>
+                      <input type="text" id="logradouro" name="logradouro" required class="input-field">
+                  </div>
+
+                  <div class="form-group">
+                      <label for="numero_residencial">Número *</label>
+                      <input type="text" id="numero_residencial" name="numero_residencial" required class="input-field">
+                  </div>
+
+                  <div class="form-group col-span-full col-span-2-md">
+                      <label for="bairro">Bairro *</label>
+                      <input type="text" id="bairro" name="bairro" required class="input-field">
+                  </div>
+
+                  <div class="form-group">
+                      <label for="cidade">Cidade *</label>
+                      <input type="text" id="cidade" name="cidade" required class="input-field">
+                  </div>
+              </div>
+          </div>
+
+          <div class="section">
+              <h2>4. Compromisso e Disponibilidade</h2>
+
+              <div class="form-group" style="margin-bottom: 1.5rem;">
+                  <label for="horas_semanais_disponiveis">Horas Semanais Disponíveis (Estimativa)</label>
+                  <input type="number" id="horas_semanais_disponiveis" name="horas_semanais_disponiveis" min="1" max="168"
+                          class="input-field col-span-1-half-md">
+              </div>
+
+              <div style="margin-bottom: 2rem;">
+                  <label class="block-label" style="margin-bottom: 0.5rem;">Áreas de Atuação *</label>
+                  <div class="checkbox-container" id="areas_atuacao">
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="1"><span>Psicologia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="2"><span>Fisioterapia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="3"><span>Medicina</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="4"><span>Nutrição</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="5"><span>Assistência Social</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="6"><span>Outras/Apoio</span></label>
+                  </div>
+              </div>
+              
+              <div>
+                  <label class="block-label" style="margin-bottom: 0.5rem;">Disponibilidade de Horários</label>
+                  <div class="disponibilidade-adder">
+                      <select id="dia_semana" class="input-field" style="flex: 1.5;">
+                          <option value="">Selecione o dia</option>
+                          <option value="Segunda-feira">Segunda-feira</option>
+                          <option value="Terça-feira">Terça-feira</option>
+                          <option value="Quarta-feira">Quarta-feira</option>
+                          <option value="Quinta-feira">Quinta-feira</option>
+                          <option value="Sexta-feira">Sexta-feira</option>
+                          <option value="Sábado">Sábado</option>
+                          <option value="Domingo">Domingo</option>
+                      </select>
+                      <input type="time" id="horario" class="input-field" style="flex: 1;">
+                      <button type="button" id="btnAddDisponibilidade" class="btn" style="background-color: var(--cor4); color: white; padding: 0.5rem 1rem;">Adicionar</button>
+                  </div>
+                  <ul id="listaDisponibilidades" style="list-style: none; padding: 0; margin-top: 1rem;"></ul>
+              </div>
+          </div>
+          <button type="submit" class="btn btn-primary">
+              Finalizar Cadastro
+          </button>
+      </form>
+  </div>
+  <script>
+    // Armazenamento da disponibilidade (lista de objetos)
+    let disponibilidadesData = [];
+
+    // --- 1. LÓGICA DE ADIÇÃO DE DISPONIBILIDADE NA TELA ---
+    document.getElementById('btnAddDisponibilidade').addEventListener('click', () => {
+        const diaSemanaSelect = document.getElementById('dia_semana');
+        const horarioInput = document.getElementById('horario');
+        
+        const diaSemana = diaSemanaSelect.value;
+        const horario = horarioInput.value;
+
+        if (diaSemana && horario) {
+            // Adiciona na lista interna de dados (para enviar ao back-end)
+            disponibilidadesData.push({
+                diaSemana: diaSemana,
+                horario: horario // O back-end (DisponibilidadeRequest) espera "HH:mm"
+            });
+
+            // Atualiza a lista na tela para o usuário ver
+            const lista = document.getElementById('listaDisponibilidades');
+            const listItem = document.createElement('li');
+            
+            // Cria o texto formatado para exibição
+            const textoDisplay = `✅ ${diaSemana}: ${horario}`;
+            listItem.innerHTML = `
+                <span>${textoDisplay}</span>
+                <button type="button" onclick="removeDisponibilidade(this, '${diaSemana}', '${horario}')" style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">(Remover)</button>
+            `;
+            lista.appendChild(listItem);
+
+            // Limpa os campos de seleção para a próxima adição
+            diaSemanaSelect.value = '';
+            horarioInput.value = '';
+        } else {
+            alert('Por favor, selecione um dia e um horário.');
+        }
+    });
+
+    // Função para remover um item da disponibilidade
+    function removeDisponibilidade(button, dia, horario) {
+        // Encontra o índice na lista de dados
+        const index = disponibilidadesData.findIndex(d => d.diaSemana === dia && d.horario === horario);
+        if (index > -1) {
+            disponibilidadesData.splice(index, 1); // Remove da lista de dados
+        }
+        
+        // Remove o elemento visual da lista
+        button.closest('li').remove();
+    }
+
+
+    // --- 2. LÓGICA DE COLETA DE DADOS DO FORMULÁRIO ---
+    function collectFormData(form) {
+        // 1. Coleta dados simples
+        const data = {
+            // DADOS PESSOAIS
+            nome: form.nome.value,
+            profissao: form.profissao.value,
+            registroConselho: form.registro_conselho.value || null,
+            rg: form.rg.value,
+            cpf: form.cpf.value.replace(/[^0-9]/g, ''), // Remove caracteres não numéricos
+            
+            // ENDEREÇO
+            cep: form.cep.value.replace(/[^0-9]/g, ''), 
+            logradouro: form.logradouro.value,
+            numeroResidencial: parseInt(form.numero_residencial.value),
+            bairro: form.bairro.value,
+            cidade: form.cidade.value,
+            
+            // COMPROMISSO
+            horasSemanaisDisponiveis: form.horas_semanais_disponiveis.value ? parseInt(form.horas_semanais_disponiveis.value) : null,
+        };
+        
+        // 2. Coleta Telefones
+        const telefones = [];
+        // O back-end espera que o TelefonePessoal (celular) seja obrigatório, 
+        // mas o request espera todos os 3 juntos. Vamos agrupar os 3.
+        telefones.push({
+            telefonePessoal: form.telefone_pessoal.value.replace(/[^0-9]/g, ''),
+            telefoneResidencial: form.telefone_residencial.value.replace(/[^0-9]/g, '') || null,
+            telefoneConsultorio: form.telefone_consultorio.value.replace(/[^0-9]/g, '') || null,
+        });
+        data.telefones = telefones;
+
+        // 3. Coleta Disponibilidade (da lista dinâmica)
+        data.disponibilidades = disponibilidadesData;
+        
+        // 4. Coleta Áreas de Atuação
+        const areasSelecionadas = Array.from(document.querySelectorAll('input[name="areas"]:checked'))
+                                    .map(checkbox => parseInt(checkbox.value));
+        data.areas = areasSelecionadas;
+        
+        return data;
+    }
+
+    // --- 3. SUBMISSÃO E CONEXÃO COM A API ---
+
+    // URL: Sua aplicação Spring Boot deve estar rodando na porta 8080 (se não, altere o valor abaixo)
+    const API_URL = 'http://localhost:8080/api/voluntarios'; 
+
+    document.getElementById('voluntarioForm').addEventListener('submit', async (e) => {
+        e.preventDefault(); // Impede o envio tradicional do formulário
+        
+        const form = e.target;
+        const submitButton = form.querySelector('.btn-primary');
+        const originalButtonText = submitButton.textContent;
+        
+        // Limpa mensagens de erro antigas
+        document.querySelectorAll('.error-message').forEach(el => el.remove());
+        
+        const requestData = collectFormData(form);
+
+        // Verifica se pelo menos uma área foi selecionada
+        if (requestData.areas.length === 0) {
+            alert("Por favor, selecione pelo menos uma Área de Atuação.");
+            // Adicionar destaque visual na seção de áreas, se desejar
+            return;
+        }
+        
+        // Verifica se pelo menos uma disponibilidade foi adicionada
+        if (requestData.disponibilidades.length === 0) {
+            alert("Por favor, adicione pelo menos um Horário de Disponibilidade.");
+            return;
+        }
+
+        try {
+            submitButton.textContent = 'Enviando...';
+            submitButton.disabled = true;
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(requestData)
+            });
+
+            // Lidar com a resposta da API (Success: 201 Created)
+            if (response.ok) {
+                // Cadastro bem-sucedido
+                alert('✅ Cadastro realizado com sucesso! Em breve entraremos em contato.');
+                form.reset(); // Limpa o formulário
+                disponibilidadesData = []; // Limpa os dados internos de disponibilidade
+                document.getElementById('listaDisponibilidades').innerHTML = ''; // Limpa a lista da tela
+            } 
+            // Lidar com erros do back-end (Error: 400 Bad Request / 409 Conflict)
+            else {
+                const errorBody = await response.json();
+                let errorMessage = 'Erro ao processar o cadastro.';
+                
+                if (errorBody.status === 400 && errorBody.errors) {
+                    // Erros de Validação (@NotBlank, @NotNull)
+                    errorMessage = "Erro de Validação: Verifique os campos abaixo:";
+                    const errorList = document.createElement('ul');
+                    errorList.style.color = 'inherit';
+                    errorList.style.listStyle = 'disc';
+                    errorList.style.marginLeft = '20px';
+                    errorBody.errors.forEach(err => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = err;
+                        errorList.appendChild(listItem);
+                    });
+                    
+                    const errorDiv = createErrorElement(errorMessage);
+                    errorDiv.appendChild(errorList);
+                    form.prepend(errorDiv);
+                    
+                    // Exibe a mensagem do alerta para clareza
+                    alert('Falha no Cadastro. Verifique a lista de erros no topo do formulário.');
+
+                } else if (errorBody.status === 409 && errorBody.error) {
+                    // Erros de Negócio (ex: CPF já cadastrado)
+                    errorMessage = `Erro de Negócio (409): ${errorBody.error}`;
+                    form.prepend(createErrorElement(errorMessage));
+                    alert(`Falha no Cadastro: ${errorBody.error}`);
+                    
+                } else if (errorBody.error) {
+                    // Outros erros da API (ex: 500 Internal Server Error, 404 Not Found)
+                    errorMessage = `Erro da API: ${errorBody.error}`;
+                    form.prepend(createErrorElement(errorMessage));
+                    alert(`Falha no Cadastro: ${errorBody.error}`);
+                }
+            }
+        } catch (error) {
+            console.error('Erro de conexão:', error);
+            alert('❌ Erro de conexão. Verifique se o servidor do back-end está rodando (porta 8080).');
+        } finally {
+            submitButton.textContent = originalButtonText;
+            submitButton.disabled = false;
+        }
+    });
+
+    // Função auxiliar para criar a div de erro
+    function createErrorElement(text) {
+        const div = document.createElement('div');
+        div.className = 'error-message';
+        div.style.padding = '1rem';
+        div.style.marginBottom = '1rem';
+        div.style.backgroundColor = '#fde2e2';
+        div.style.color = '#c0392b';
+        div.style.borderRadius = '0.5rem';
+        div.style.border = '1px solid #f99';
+        div.innerHTML = `<p style="font-weight: 600;">${text}</p>`; // Usar innerHTML para poder adicionar a lista de erros depois
+        return div;
+    }
+    
+    // Personalização da mensagem de validação para campos obrigatórios (mantida)
+    const requiredFields = document.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                field.addEventListener('invalid', () => {
+                    field.setCustomValidity('Por favor, preencha este campo obrigatório.');
+                });
+
+                field.addEventListener('input', () => {
+                    field.setCustomValidity('');
+                });
+            });
+  </script>
+</body>
+</html>

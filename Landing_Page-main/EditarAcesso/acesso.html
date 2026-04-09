@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="acesso.css">
+    <link rel="shortcut icon" href="../Imagens/icone_logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Acesso Cadastro</title>
+</head>
+<body>
+<!-- PAINEL PRINCIPAL -->
+    <div class="card-container">
+        
+        <div class="header-row">
+            <h1 class="page-title">
+                <div class="icon-bg"><i data-lucide="users-round"></i></div>
+                Gestão de Acessos
+            </h1>
+            <!-- Botão que abre modal VAZIO -->
+            <button class="btn-novo" onclick="openNewModal()">
+                <i data-lucide="plus-circle"></i>
+                Novo Acesso
+            </button>
+        </div>
+
+        <div class="filters-row">
+            <div class="filter-group" style="min-width: 200px;">
+                <label>Filtro:</label>
+                <select class="form-control" id="searchFilter">
+                    <option value="nome">Nome</option>
+                    <option value="email">Email</option>
+                    <option value="perfil">Perfil</option>
+                </select>
+            </div>
+            <div class="filter-group search-group">
+                <label>Pesquisar:</label>
+                <div class="search-icon"><i data-lucide="search" size="18"></i></div>
+                <input type="text" class="form-control" id="searchInput" placeholder="Buscar por nome, email, registro no conselho..." onkeyup="filterTable()">
+            </div>
+            <div class="filter-group">
+                <label>Status:</label>
+                <div class="status-toggle">
+                    <div class="status-option active" onclick="setStatusFilter('todos', this)">Todos</div>
+                    <div class="status-option" onclick="setStatusFilter('ativos', this)">Ativos</div>
+                    <div class="status-option" onclick="setStatusFilter('inativos', this)">Inativos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-wrapper" id="tableContainer">
+            <table id="accessTable">
+                <thead>
+                    <tr>
+                        <th width="30%">Email</th>
+                        <th width="30%">Nome</th>
+                        <th width="15%" class="center-text">Tipo de Usuário</th>
+                        <th width="10%" class="center-text">Status</th>
+                        <th width="15%" class="center-text">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="data-row">
+                        <td class="col-email">Gbarbacena@gmail.com</td>
+                        <td class="col-nome">Dr. Genário Claudinei Barbacena</td>
+                        <td class="center-text col-perfil">Voluntário</td>
+                        <td class="center-text" data-status="ativo"><span class="badge-status">Ativo</span></td>
+                        <td class="center-text">
+                            <!-- Botão de Edição com chamada JS -->
+                            <button class="btn-action btn-edit" onclick="openEditModal(this)">
+                                <i data-lucide="pencil" size="16"></i>
+                            </button>
+                            <button class="btn-action btn-delete"><i data-lucide="trash-2" size="16"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="data-row">
+                        <td class="col-email">JoaoSalesSilva@gmail.com</td>
+                        <td class="col-nome">Dr. João da Silva Sales</td>
+                        <td class="center-text col-perfil">Voluntário</td>
+                        <td class="center-text" data-status="ativo"><span class="badge-status">Ativo</span></td>
+                        <td class="center-text">
+                            <button class="btn-action btn-edit" onclick="openEditModal(this)">
+                                <i data-lucide="pencil" size="16"></i>
+                            </button>
+                            <button class="btn-action btn-delete"><i data-lucide="trash-2" size="16"></i></button>
+                        </td>
+                    </tr>
+                    <tr class="data-row">
+                        <td class="col-email">AnaSouza@gmail.com</td>
+                        <td class="col-nome">Dra. Ana Souza</td>
+                        <td class="center-text col-perfil">Voluntário</td>
+                        <td class="center-text" data-status="inativo"><span class="badge-status inactive">Inativo</span></td>
+                        <td class="center-text">
+                            <button class="btn-action btn-edit" onclick="openEditModal(this)">
+                                <i data-lucide="pencil" size="16"></i>
+                            </button>
+                            <button class="btn-action btn-delete"><i data-lucide="trash-2" size="16"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon"><i data-lucide="cone" size="48"></i></div>
+            <div class="empty-text">Nenhum item encontrado...</div>
+        </div>
+    </div>
+
+    <!-- MODAL (NOVO / EDITAR) -->
+    <div class="modal-overlay" id="modalNovoAcesso">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">
+                    <i data-lucide="user-plus"></i> Novo Voluntário
+                </div>
+                <button class="btn-close" id="btnCloseX"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formVoluntario">
+                    
+                    <!-- 1. Dados Pessoais -->
+                    <div class="section-header">
+                        <i data-lucide="user"></i> 1. Dados Pessoais e Profissionais
+                    </div>
+                    <div class="form-grid form-grid-2">
+                        <div class="input-wrapper col-span-2">
+                            <label>Nome Completo <span>*</span></label>
+                            <input type="text" class="form-control" id="nome" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Profissão <span>*</span></label>
+                            <input type="text" class="form-control" id="profissao" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Registro Conselho (CRM/CRP)</label>
+                            <input type="text" class="form-control" id="registro">
+                        </div>
+                        <div class="input-wrapper">
+                            <label>RG <span>*</span></label>
+                            <input type="text" class="form-control" id="rg" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>CPF <span>*</span></label>
+                            <input type="text" class="form-control" id="cpf" required>
+                        </div>
+                    </div>
+
+                    <!-- 2. Contatos -->
+                    <div class="section-header">
+                        <i data-lucide="phone"></i> 2. Contatos
+                    </div>
+                    <div class="form-grid form-grid-3">
+                        <div class="input-wrapper">
+                            <label>Celular (Pessoal) <span>*</span></label>
+                            <input type="tel" class="form-control" id="tel_pessoal" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Residencial</label>
+                            <input type="tel" class="form-control" id="tel_residencial">
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Consultório</label>
+                            <input type="tel" class="form-control" id="tel_consultorio">
+                        </div>
+                    </div>
+
+                    <!-- 3. Endereço -->
+                    <div class="section-header">
+                        <i data-lucide="map-pin"></i> 3. Endereço
+                    </div>
+                    <div class="form-grid form-grid-4">
+                        <div class="input-wrapper">
+                            <label>CEP <span>*</span></label>
+                            <input type="text" class="form-control" id="cep" required>
+                        </div>
+                        <div class="input-wrapper col-span-3">
+                            <label>Logradouro <span>*</span></label>
+                            <input type="text" class="form-control" id="logradouro" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Número <span>*</span></label>
+                            <input type="text" class="form-control" id="numero" required>
+                        </div>
+                        <div class="input-wrapper col-span-2">
+                            <label>Bairro <span>*</span></label>
+                            <input type="text" class="form-control" id="bairro" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Cidade <span>*</span></label>
+                            <input type="text" class="form-control" id="cidade" required>
+                        </div>
+                    </div>
+
+                    <!-- 4. Disponibilidade -->
+                    <div class="section-header">
+                        <i data-lucide="calendar-clock"></i> 4. Disponibilidade
+                    </div>
+                    <div class="form-grid form-grid-2">
+                        <div class="input-wrapper">
+                            <label>Horas Semanais</label>
+                            <input type="number" class="form-control" id="horas">
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Adicionar Horário</label>
+                            <div style="display: flex; gap: 5px;">
+                                <select class="form-control" style="flex:1;">
+                                    <option>Segunda-feira</option>
+                                    <option>Terça-feira</option>
+                                    <option>Quarta-feira</option>
+                                    <option>Quinta-feira</option>
+                                    <option>Sexta-feira</option>
+                                </select>
+                                <input type="time" class="form-control" style="width: 100px;">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-modal btn-cancel" id="btnCancel">Cancelar</button>
+                <button class="btn-modal btn-save" onclick="saveData()">
+                    <i data-lucide="check"></i> Atualizar Cadastro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+         lucide.createIcons();
+        const modal = document.getElementById('modalNovoAcesso');
+        
+        function openNewModal() {
+            // Limpa o formulário
+            document.getElementById('formVoluntario').reset();
+            
+            // Configura UI para "Novo"
+            document.getElementById('modalTitle').innerHTML = '<i data-lucide="user-plus"></i> Novo Voluntário';
+            
+            modal.classList.add('show');
+            lucide.createIcons();
+        }
+
+        function openEditModal(btn) {
+            const row = btn.closest('tr');
+            const nome = row.querySelector('.col-nome').textContent;
+            
+            // Preenche o que é possível com base na tabela
+            document.getElementById('nome').value = nome;
+            // Outros campos ficariam vazios ou viriam de uma API real
+            
+            // Configura UI para "Editar"
+            document.getElementById('modalTitle').innerHTML = '<i data-lucide="pencil"></i> Editar Voluntário';
+            
+            modal.classList.add('show');
+            lucide.createIcons();
+        }
+
+        function saveData() {
+            alert('Dados salvos com sucesso!');
+            modal.classList.remove('show');
+        }
+
+        // Fechamento do Modal
+        document.getElementById('btnCloseX').onclick = () => modal.classList.remove('show');
+        document.getElementById('btnCancel').onclick = () => modal.classList.remove('show');
+
+        // Lógica de Filtro 
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('.data-row');
+            let has = false;
+            rows.forEach(row => {
+                if(row.innerText.toLowerCase().includes(input)) {
+                    row.classList.remove('hidden'); has = true;
+                } else row.classList.add('hidden');
+            });
+            document.getElementById('emptyState').style.display = has ? 'none' : 'flex';
+        }
+        function setStatusFilter(status, el) {
+            document.querySelectorAll('.status-option').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            // Lógica simplificada de filtro visual
+        }
+    </script>
+</body>
+</html>
