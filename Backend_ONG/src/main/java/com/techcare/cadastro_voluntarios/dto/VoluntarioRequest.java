@@ -1,5 +1,6 @@
 package com.techcare.cadastro_voluntarios.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,36 +18,23 @@ public class VoluntarioRequest {
     private String rg;
 
     @NotBlank
-    @Size(min = 11, max = 11)
+    @Size(min = 11, max = 11, message = "CPF deve ter 11 dígitos")
     private String cpf;
 
     private String registroConselho;
 
-    @NotNull
-    private Integer cep;
-
-    @NotBlank
-    private String logradouro;
-
-    @NotNull
-    private Integer numeroResidencial;
-
-    @NotBlank
-    private String bairro;
-
-    @NotBlank
-    private String cidade;
-
     private Integer horasSemanaisDisponiveis;
+
+    @NotNull
+    @Valid
+    private EnderecoRequest endereco;
 
     private List<TelefoneRequest> telefones;
 
     private List<DisponibilidadeRequest> disponibilidades;
 
-    // lista de ids de áreas escolhidas
     private List<Integer> areas;
 
-    // getters e setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
@@ -62,23 +50,11 @@ public class VoluntarioRequest {
     public String getRegistroConselho() { return registroConselho; }
     public void setRegistroConselho(String registroConselho) { this.registroConselho = registroConselho; }
 
-    public Integer getCep() { return cep; }
-    public void setCep(Integer cep) { this.cep = cep; }
-
-    public String getLogradouro() { return logradouro; }
-    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
-
-    public Integer getNumeroResidencial() { return numeroResidencial; }
-    public void setNumeroResidencial(Integer numeroResidencial) { this.numeroResidencial = numeroResidencial; }
-
-    public String getBairro() { return bairro; }
-    public void setBairro(String bairro) { this.bairro = bairro; }
-
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
-
     public Integer getHorasSemanaisDisponiveis() { return horasSemanaisDisponiveis; }
     public void setHorasSemanaisDisponiveis(Integer horasSemanaisDisponiveis) { this.horasSemanaisDisponiveis = horasSemanaisDisponiveis; }
+
+    public EnderecoRequest getEndereco() { return endereco; }
+    public void setEndereco(EnderecoRequest endereco) { this.endereco = endereco; }
 
     public List<TelefoneRequest> getTelefones() { return telefones; }
     public void setTelefones(List<TelefoneRequest> telefones) { this.telefones = telefones; }

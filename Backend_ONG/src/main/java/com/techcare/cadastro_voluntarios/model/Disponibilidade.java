@@ -1,6 +1,7 @@
 package com.techcare.cadastro_voluntarios.model;
 
 import jakarta.persistence.*;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "disponibilidade")
@@ -15,51 +16,27 @@ public class Disponibilidade {
     private Voluntario voluntario;
 
     private String diaSemana;
-    private String horario;
+    private LocalTime horario;
 
     public Disponibilidade() { }
 
-    public Disponibilidade(
-            Integer idDisponibilidade,
-            Voluntario voluntario,
-            String diaSemana,
-            String horario
-    ) {
+    public Disponibilidade(Integer idDisponibilidade, Voluntario voluntario,
+                           String diaSemana, LocalTime horario) {
         this.idDisponibilidade = idDisponibilidade;
         this.voluntario = voluntario;
         this.diaSemana = diaSemana;
         this.horario = horario;
     }
 
-    public Integer getIdDisponibilidade() {
-        return idDisponibilidade;
-    }
+    public Integer getIdDisponibilidade() { return idDisponibilidade; }
+    public void setIdDisponibilidade(Integer idDisponibilidade) { this.idDisponibilidade = idDisponibilidade; }
 
-    public void setIdDisponibilidade(Integer idDisponibilidade) {
-        this.idDisponibilidade = idDisponibilidade;
-    }
+    public Voluntario getVoluntario() { return voluntario; }
+    public void setVoluntario(Voluntario voluntario) { this.voluntario = voluntario; }
 
-    public Voluntario getVoluntario() {
-        return voluntario;
-    }
+    public String getDiaSemana() { return diaSemana; }
+    public void setDiaSemana(String diaSemana) { this.diaSemana = diaSemana; }
 
-    public void setVoluntario(Voluntario voluntario) {
-        this.voluntario = voluntario;
-    }
-
-    public String getDiaSemana() {
-        return diaSemana;
-    }
-
-    public void setDiaSemana(String diaSemana) {
-        this.diaSemana = diaSemana;
-    }
-
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
-    }
+    public LocalTime getHorario() { return horario; }
+    public void setHorario(LocalTime horario) { this.horario = horario; }
 }

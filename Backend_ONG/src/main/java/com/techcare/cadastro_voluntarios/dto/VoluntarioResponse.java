@@ -11,15 +11,11 @@ public class VoluntarioResponse {
     private String cpf;
     private String rg;
     private String registroConselho;
-    private Integer cep;
-    private String logradouro;
-    private Integer numeroResidencial;
-    private String bairro;
-    private String cidade;
     private Integer horasSemanaisDisponiveis;
     private LocalDate dataCadastro;
     private Boolean ativo;
 
+    private EnderecoResponse endereco;
     private List<TelefoneResponse> telefones;
     private List<DisponibilidadeResponse> disponibilidades;
     private List<String> areas;
@@ -42,21 +38,6 @@ public class VoluntarioResponse {
     public String getRegistroConselho() { return registroConselho; }
     public void setRegistroConselho(String registroConselho) { this.registroConselho = registroConselho; }
 
-    public Integer getCep() { return cep; }
-    public void setCep(Integer cep) { this.cep = cep; }
-
-    public String getLogradouro() { return logradouro; }
-    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
-
-    public Integer getNumeroResidencial() { return numeroResidencial; }
-    public void setNumeroResidencial(Integer numeroResidencial) { this.numeroResidencial = numeroResidencial; }
-
-    public String getBairro() { return bairro; }
-    public void setBairro(String bairro) { this.bairro = bairro; }
-
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
-
     public Integer getHorasSemanaisDisponiveis() { return horasSemanaisDisponiveis; }
     public void setHorasSemanaisDisponiveis(Integer horasSemanaisDisponiveis) { this.horasSemanaisDisponiveis = horasSemanaisDisponiveis; }
 
@@ -65,6 +46,9 @@ public class VoluntarioResponse {
 
     public Boolean getAtivo() { return ativo; }
     public void setAtivo(Boolean ativo) { this.ativo = ativo; }
+
+    public EnderecoResponse getEndereco() { return endereco; }
+    public void setEndereco(EnderecoResponse endereco) { this.endereco = endereco; }
 
     public List<TelefoneResponse> getTelefones() { return telefones; }
     public void setTelefones(List<TelefoneResponse> telefones) { this.telefones = telefones; }

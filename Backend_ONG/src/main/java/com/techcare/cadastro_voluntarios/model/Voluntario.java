@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "voluntarios")
+@Table(name = "voluntario")
 public class Voluntario {
 
     @Id
@@ -21,15 +21,14 @@ public class Voluntario {
     private String cpf;
 
     private String registroConselho;
-    private Integer cep;
-    private String logradouro;
-    private Integer numeroResidencial;
-    private String bairro;
-    private String cidade;
     private Integer horasSemanaisDisponiveis;
 
     private LocalDate dataCadastro;
     private Boolean ativo = true;
+
+    // Endereço agora é uma tabela separada
+    @OneToMany(mappedBy = "voluntario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Endereco> enderecos = new ArrayList<>();
 
     @OneToMany(mappedBy = "voluntario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TelefoneVoluntario> telefones = new ArrayList<>();
@@ -63,21 +62,6 @@ public class Voluntario {
     public String getRegistroConselho() { return registroConselho; }
     public void setRegistroConselho(String registroConselho) { this.registroConselho = registroConselho; }
 
-    public Integer getCep() { return cep; }
-    public void setCep(Integer cep) { this.cep = cep; }
-
-    public String getLogradouro() { return logradouro; }
-    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
-
-    public Integer getNumeroResidencial() { return numeroResidencial; }
-    public void setNumeroResidencial(Integer numeroResidencial) { this.numeroResidencial = numeroResidencial; }
-
-    public String getBairro() { return bairro; }
-    public void setBairro(String bairro) { this.bairro = bairro; }
-
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
-
     public Integer getHorasSemanaisDisponiveis() { return horasSemanaisDisponiveis; }
     public void setHorasSemanaisDisponiveis(Integer horasSemanaisDisponiveis) { this.horasSemanaisDisponiveis = horasSemanaisDisponiveis; }
 
@@ -86,6 +70,9 @@ public class Voluntario {
 
     public Boolean getAtivo() { return ativo; }
     public void setAtivo(Boolean ativo) { this.ativo = ativo; }
+
+    public List<Endereco> getEnderecos() { return enderecos; }
+    public void setEnderecos(List<Endereco> enderecos) { this.enderecos = enderecos; }
 
     public List<TelefoneVoluntario> getTelefones() { return telefones; }
     public void setTelefones(List<TelefoneVoluntario> telefones) { this.telefones = telefones; }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,7 +48,6 @@ public class VoluntarioService {
         v.setDataCadastro(LocalDate.now());
         v.setAtivo(true);
 
-        // carrega areas por ids (se houver)
         if (req.getAreas() != null && !req.getAreas().isEmpty()) {
             List<AreaAtuacao> areas = areaRepo.findAllById(req.getAreas());
             if (areas.size() != req.getAreas().size()) {
@@ -62,7 +62,7 @@ public class VoluntarioService {
 
     @Transactional
     public VoluntarioResponse atualizar(Integer id, VoluntarioUpdateRequest req) {
-        Voluntario v = voluntarioRepo.findById(id) // <--- 'v' é declarada aqui
+        Voluntario v = voluntarioRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Voluntário não encontrado"));
 
         if (v.getAtivo() != null && !v.getAtivo()) {
@@ -71,9 +71,18 @@ public class VoluntarioService {
 
         if (req.getNome() != null) v.setNome(req.getNome());
         if (req.getProfissao() != null) v.setProfissao(req.getProfissao());
-        // ... (outros 'ifs' estão corretos) ...
-        if (req.getCidade() != null) v.setCidade(req.getCidade());
+        if (req.getRg() != null) v.setRg(req.getRg());
+        if (req.getRegistroConselho() != null) v.setRegistroConselho(req.getRegistroConselho());
         if (req.getHorasSemanaisDisponiveis() != null) v.setHorasSemanaisDisponiveis(req.getHorasSemanaisDisponiveis());
+
+        // Endereço
+        if (req.getEndereco() != null) {
+            v.getEnderecos().clear();
+            EnderecoRequest e = req.getEndereco();
+            v.getEnderecos().add(new Endereco(v,
+                    e.getCep(), e.getLogradouro(), e.getNumero(),
+                    e.getComplemento(), e.getBairro(), e.getCidade(), e.getEstado()));
+        }
 
         final Voluntario voluntarioFinal = v;
 
@@ -88,12 +97,13 @@ public class VoluntarioService {
             );
         }
 
+        // Disponibilidades
         if (req.getDisponibilidades() != null) {
             v.getDisponibilidades().clear();
             req.getDisponibilidades().forEach(d ->
                     voluntarioFinal.getDisponibilidades().add(new Disponibilidade(null, voluntarioFinal,
                             d.getDiaSemana(),
-                            d.getHorario()))
+                            LocalTime.parse(d.getHorario())))
             );
         }
 
@@ -137,5 +147,4 @@ public class VoluntarioService {
 
         return VoluntarioMapper.toResponse(v);
     }
-
 }

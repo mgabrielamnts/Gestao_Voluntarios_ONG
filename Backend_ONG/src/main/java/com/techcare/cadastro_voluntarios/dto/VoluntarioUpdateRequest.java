@@ -8,13 +8,9 @@ public class VoluntarioUpdateRequest {
     private String profissao;
     private String rg;
     private String registroConselho;
-    private Integer cep;
-    private String logradouro;
-    private Integer numeroResidencial;
-    private String bairro;
-    private String cidade;
     private Integer horasSemanaisDisponiveis;
 
+    private EnderecoRequest endereco;
     private List<TelefoneRequest> telefones;
     private List<DisponibilidadeRequest> disponibilidades;
     private List<Integer> areas;
@@ -31,23 +27,11 @@ public class VoluntarioUpdateRequest {
     public String getRegistroConselho() { return registroConselho; }
     public void setRegistroConselho(String registroConselho) { this.registroConselho = registroConselho; }
 
-    public Integer getCep() { return cep; }
-    public void setCep(Integer cep) { this.cep = cep; }
-
-    public String getLogradouro() { return logradouro; }
-    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
-
-    public Integer getNumeroResidencial() { return numeroResidencial; }
-    public void setNumeroResidencial(Integer numeroResidencial) { this.numeroResidencial = numeroResidencial; }
-
-    public String getBairro() { return bairro; }
-    public void setBairro(String bairro) { this.bairro = bairro; }
-
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
-
     public Integer getHorasSemanaisDisponiveis() { return horasSemanaisDisponiveis; }
     public void setHorasSemanaisDisponiveis(Integer horasSemanaisDisponiveis) { this.horasSemanaisDisponiveis = horasSemanaisDisponiveis; }
+
+    public EnderecoRequest getEndereco() { return endereco; }
+    public void setEndereco(EnderecoRequest endereco) { this.endereco = endereco; }
 
     public List<TelefoneRequest> getTelefones() { return telefones; }
     public void setTelefones(List<TelefoneRequest> telefones) { this.telefones = telefones; }
