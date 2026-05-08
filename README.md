@@ -1,41 +1,84 @@
-Sistema de Gestão de Voluntários para ONG
+# 🤝 Sistema de Gestão de Voluntários para ONG
 
-Projeto desenvolvido com foco na organização e gerenciamento de voluntários para uma ONG, integrando landing page institucional, formulário de cadastro e estrutura inicial para um sistema de gestão.
+Projeto desenvolvido com foco na digitalização e organização da gestão de voluntários de uma ONG, integrando landing page institucional, formulário de cadastro e estrutura inicial de banco de dados para gerenciamento das informações.
 
-📌 Objetivo
+---
 
-Centralizar e organizar informações de voluntários, facilitando processos de cadastro, acompanhamento e gerenciamento de dados dentro da instituição.
+## 📌 Sobre o Projeto
 
-O projeto foi pensado para oferecer uma base digital capaz de melhorar a organização operacional e reduzir controles manuais.
+A proposta do sistema é centralizar o cadastro e acompanhamento de voluntários, reduzindo controles manuais e melhorando a organização operacional da instituição.
 
-🚀 Funcionalidades
-Landing page institucional
-Formulário de cadastro de voluntários
-Estrutura inicial de painel de gestão
-Organização de informações em banco de dados
-Modelagem inicial do sistema
-Estrutura backend para gerenciamento de dados
-🛠 Tecnologias Utilizadas
-HTML
-CSS
-Java
-SQL
-Banco de Dados Relacional
-📂 Estrutura do Projeto
-Gestao_Voluntarios_ONG/
-├── Landing_Page-main
-├── Backend_ONG
-💡 Aplicação
+O projeto contempla uma interface web para captação de voluntários e uma estrutura backend voltada para armazenamento e gerenciamento dos dados cadastrados.
 
-O sistema foi desenvolvido como proposta de digitalização e apoio à gestão de voluntários, visando melhorar a confiabilidade das informações, padronização de cadastros e organização operacional da ONG.
+---
 
-📚 Aprendizados
+## 🎯 Objetivo
 
-Durante o desenvolvimento foram aplicados conceitos de:
+Desenvolver uma solução digital capaz de:
 
-Desenvolvimento web
-Estruturação backend
-Modelagem de banco de dados
-Organização de sistemas
-Integração entre front-end e gerenciamento de dados
-Desenvolvimento orientado a solução real
+* ✅ Centralizar informações de voluntários
+* ✅ Facilitar o processo de cadastro
+* ✅ Melhorar a organização operacional
+* ✅ Reduzir controles manuais
+* ✅ Estruturar uma base para expansão futura do sistema
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+### Front-end
+
+* HTML5
+* CSS3
+
+### Back-end
+
+* Java
+
+### Banco de Dados
+
+* SQL
+* Modelagem Relacional
+
+---
+
+## 🚀 Funcionalidades
+
+### 🌐 Landing Page
+
+* Página institucional da ONG
+* Apresentação do projeto
+* Navegação intuitiva
+
+### 📝 Cadastro de Voluntários
+
+* Formulário de inscrição
+* Coleta estruturada de dados
+* Organização das informações
+
+### 🗄️ Estrutura de Gestão
+
+* Base inicial para gerenciamento de voluntários
+* Modelagem de banco de dados relacional
+* Estrutura preparada para futuras expansões
+
+---
+
+
+## 📚 Conceitos Aplicados
+
+Durante o desenvolvimento foram trabalhados conceitos de:
+
+* Desenvolvimento Web
+* Estruturação Back-end
+* Banco de Dados Relacional
+* Modelagem de Sistemas
+* Organização de Dados
+* Desenvolvimento orientado a solução real
+
+---
+
+## 👥 Equipe
+
+Projeto desenvolvido em grupo pela equipe **TechCare**, como proposta de solução tecnológica voltada à gestão de voluntários e apoio à organização operacional de uma ONG.
+
