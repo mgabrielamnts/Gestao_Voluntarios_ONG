@@ -77,6 +77,11 @@ Durante o desenvolvimento foram trabalhados conceitos de:
 * Desenvolvimento orientado a solução real
 
 ---
+### Visualização do Projeto
+
+![Landing Page](./SS_LP.png)
+
+![Formulário](./SS_FM.png)
 
 ## 👥 Equipe
 
