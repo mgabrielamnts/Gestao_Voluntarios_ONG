@@ -109,6 +109,7 @@ label {
   font-weight: 500; 
   color: var(--cor5);
   margin-bottom: 0.25rem;
+  margin-top: 0.5rem;
 }
 
 .input-field {
