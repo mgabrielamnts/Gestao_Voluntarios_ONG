@@ -4,11 +4,11 @@ package com.gaa.backend.service;
  * Service responsável pelas regras de negócio da aplicação.
  */
 
-
 import com.gaa.backend.exception.ResourceNotFoundException;
 import com.gaa.backend.model.AreaAtuacao;
 import com.gaa.backend.repository.AreaAtuacaoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,10 +30,12 @@ public class AreaAtuacaoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Área de atuação não encontrada"));
     }
 
+    @Transactional
     public AreaAtuacao salvar(AreaAtuacao areaAtuacao) {
         return areaAtuacaoRepository.save(areaAtuacao);
     }
 
+    @Transactional
     public AreaAtuacao atualizar(Long id, AreaAtuacao areaAtualizada) {
 
         AreaAtuacao area = buscarPorId(id);
@@ -43,6 +45,7 @@ public class AreaAtuacaoService {
         return areaAtuacaoRepository.save(area);
     }
 
+    @Transactional
     public void deletar(Long id) {
 
         AreaAtuacao area = buscarPorId(id);
