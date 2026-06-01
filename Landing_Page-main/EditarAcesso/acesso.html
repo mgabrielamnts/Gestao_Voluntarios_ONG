@@ -199,18 +199,18 @@
                     <div class="form-grid form-grid-2">
                         <div class="input-wrapper">
                             <label>Horas Semanais</label>
-                            <input type="number" class="form-control" id="dia_semana">
+                            <input type="number" class="form-control" id="horas_semanais">
                         </div>
                         <div class="input-wrapper">
                             <label>Selecione o dia</label>
                             <div style="display: flex; gap: 5px;">
-                                <select class="form-control" style="flex:1;">
-                                     <option value="null">Selecione o dia</option>
-                                    <option value="Segunda-feira">Segunda-feira</option>
-                                    <option value="Terça-feira">Terça-feira</option>
-                                    <option value="Quarta-feira">Quarta-feira</option>
-                                    <option value="Quinta-feira">Quinta-feira</option>
-                                    <option value="Sexta-feira">Sexta-feira</option>
+                                <select class="form-control" id="dia_semana" style="flex:1;">
+                                    <option value="null">Selecione o dia</option>
+                                    <option value="1">Segunda-feira</option>
+                                    <option value="2">Terça-feira</option>
+                                    <option value="3">Quarta-feira</option>
+                                    <option value="4">Quinta-feira</option>
+                                    <option value="5">Sexta-feira</option>
                                 </select>
                                 <input type="time" id= "horario" class="form-control" style="width: 100px;">
                                 <button type="button" id="btn-novo" class="btn-modal" style="background-color: var(--cor4); color: white; padding: 0.5rem 1rem;">
@@ -337,33 +337,40 @@
         const diaSemanaSelect = document.getElementById('dia_semana');
         const horarioInput = document.getElementById('horario');
 
-        const diaSemana = diaSemanaSelect.value;
+        const diaSemanaTexto = diaSemanaSelect.options[diaSemanaSelect.selectedIndex].text;
+        const diaSemanaValor = diaSemanaSelect.value;
         const horario = horarioInput.value;
 
-        if (diaSemana && horario) {
-            disponibilidadesData.push({ diaSemana: diaSemana, horario: horario });
+        // Verifica se selecionou um dia válido e um horário
+        if (diaSemanaValor !== "null" && diaSemanaValor !== "" && horario) {
+            
+            disponibilidadesData.push({ diaSemana: diaSemanaValor, horario: horario });
 
             const lista = document.getElementById('listaDisponibilidades');
             const listItem = document.createElement('li');
-            const textoDisplay = `✅ ${diaSemana}: ${horario}`;
+            
+            // Mostra o dia e o horário na interface
+            const textoDisplay = `✅ ${diaSemanaTexto}: ${horario}`;
+            
             listItem.innerHTML = `
                 <span>${textoDisplay}</span>
-                <button type="button" onclick="removeDisponibilidade(this, '${diaSemana}', '${horario}')"
+                <button type="button" onclick="removeDisponibilidade(this, '${diaSemanaValor}', '${horario}')"
                     style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">
                     (Remover)
                 </button>
             `;
             lista.appendChild(listItem);
 
-            diaSemanaSelect.value = '';
+            // Limpa os campos de dia e horário. 
+            diaSemanaSelect.value = 'null';
             horarioInput.value = '';
         } else {
             alert('Por favor, selecione um dia e um horário.');
         }
     });
 
-    function removeDisponibilidade(button, dia, horario) {
-        const index = disponibilidadesData.findIndex(d => d.diaSemana === dia && d.horario === horario);
+    function removeDisponibilidade(button, diaValor, horario) {
+        const index = disponibilidadesData.findIndex(d => d.diaSemana === diaValor && d.horario === horario);
         if (index > -1) disponibilidadesData.splice(index, 1);
         button.closest('li').remove();
     }
