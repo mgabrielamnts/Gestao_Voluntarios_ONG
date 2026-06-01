@@ -43,8 +43,9 @@
                 <label>Status:</label>
                 <div class="status-toggle">
                     <div class="status-option active" onclick="setStatusFilter('todos', this)">Todos</div>
+                    <div class="status-option" onclick="setStatusFilter('pendentes', this)">Pendentes</div>
                     <div class="status-option" onclick="setStatusFilter('ativos', this)">Ativos</div>
-                    <div class="status-option" onclick="setStatusFilter('inativos', this)">Inativos</div>
+                    <div class="status-option" onclick="setStatusFilter('desativados', this)">Desativados</div>
                 </div>
             </div>
         </div>
@@ -91,7 +92,7 @@
                         <td class="col-email">AnaSouza@gmail.com</td>
                         <td class="col-nome">Dra. Ana Souza</td>
                         <td class="center-text col-perfil">Voluntário</td>
-                        <td class="center-text" data-status="inativo"><span class="badge-status inactive">Inativo</span></td>
+                        <td class="center-text" data-status=""><span class="badge-status inactive">desativado</span></td>
                         <td class="center-text">
                             <button class="btn-action btn-edit" onclick="openEditModal(this)">
                                 <i data-lucide="pencil" size="16"></i>
@@ -136,8 +137,8 @@
                             <input type="text" class="form-control" id="profissao" required>
                         </div>
                         <div class="input-wrapper">
-                            <label>Registro Conselho (CRM/CRP)</label>
-                            <input type="text" class="form-control" id="registro">
+                            <label>Registro Conselho (CRM/CRP) <span>*</span></label>
+                            <input type="text" class="form-control" id="registro" required>
                         </div>
                         <div class="input-wrapper">
                             <label>RG <span>*</span></label>
@@ -231,7 +232,7 @@
     </div>
 
     <script>
-         lucide.createIcons();
+           lucide.createIcons();
         const modal = document.getElementById('modalNovoAcesso');
         
         function openNewModal() {
@@ -269,23 +270,103 @@
         document.getElementById('btnCloseX').onclick = () => modal.classList.remove('show');
         document.getElementById('btnCancel').onclick = () => modal.classList.remove('show');
 
-        // Lógica de Filtro 
+        // Lógica de Filtro Combinada (Pesquisa + Status)
+        let filtroStatusAtual = 'todos'; // Variável global para guardar o status atual
+
+        // Chamada quando o usuário digita na barra de pesquisa
         function filterTable() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const rows = document.querySelectorAll('.data-row');
-            let has = false;
-            rows.forEach(row => {
-                if(row.innerText.toLowerCase().includes(input)) {
-                    row.classList.remove('hidden'); has = true;
-                } else row.classList.add('hidden');
-            });
-            document.getElementById('emptyState').style.display = has ? 'none' : 'flex';
+            aplicarFiltros();
         }
+
+        // Chamada quando o usuário clica nos botões de Status
         function setStatusFilter(status, el) {
+            // Atualiza a classe visual 'active' nos botões
             document.querySelectorAll('.status-option').forEach(e => e.classList.remove('active'));
             el.classList.add('active');
-            // Lógica simplificada de filtro visual
+            
+            // Atualiza a variável com o status escolhido
+            filtroStatusAtual = status;
+            
+            // Roda a verificação nas linhas da tabela
+            aplicarFiltros();
         }
+
+        // Função que verifica tanto o texto digitado quanto o status selecionado
+        function aplicarFiltros() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('.data-row');
+            let hasVisibleRows = false;
+
+            rows.forEach(row => {
+                // 1. Verifica se a linha corresponde à pesquisa de texto
+                const matchesText = row.innerText.toLowerCase().includes(input);
+                
+                // 2. Verifica se a linha corresponde ao filtro de status
+                // Busca a célula (td) que contém o atributo 'data-status'
+                const tdStatus = row.querySelector('[data-status]');
+                const statusDaLinha = tdStatus ? tdStatus.getAttribute('data-status') : '';
+                
+                let matchesStatus = false;
+                if (filtroStatusAtual === 'todos') {
+                    matchesStatus = true;
+                } else if (filtroStatusAtual === 'ativos' && statusDaLinha === 'ativo') {
+                    matchesStatus = true;
+                } else if (filtroStatusAtual === 'desativados' && statusDaLinha === 'desativado') {
+                    matchesStatus = true;
+                }
+
+                // 3. A linha só será exibida se passar nos dois filtros
+                if (matchesText && matchesStatus) {
+                    row.classList.remove('hidden');
+                    row.style.display = ''; // Garante que a linha volte a aparecer
+                    hasVisibleRows = true;
+                } else {
+                    row.classList.add('hidden');
+                    row.style.display = 'none'; // Esconde a linha
+                }
+            });
+
+            // Mostra a mensagem de "Nenhum item encontrado" se nenhuma linha for exibida
+            document.getElementById('emptyState').style.display = hasVisibleRows ? 'none' : 'flex';
+        }
+
+        let disponibilidadesData = [];
+
+    // --- ADICIONAR DISPONIBILIDADE ---
+    document.getElementById('btn-novo').addEventListener('click', () => {
+        const diaSemanaSelect = document.getElementById('dia_semana');
+        const horarioInput = document.getElementById('horario');
+
+        const diaSemana = diaSemanaSelect.value;
+        const horario = horarioInput.value;
+
+        if (diaSemana && horario) {
+            disponibilidadesData.push({ diaSemana: diaSemana, horario: horario });
+
+            const lista = document.getElementById('listaDisponibilidades');
+            const listItem = document.createElement('li');
+            const textoDisplay = `✅ ${diaSemana}: ${horario}`;
+            listItem.innerHTML = `
+                <span>${textoDisplay}</span>
+                <button type="button" onclick="removeDisponibilidade(this, '${diaSemana}', '${horario}')"
+                    style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">
+                    (Remover)
+                </button>
+            `;
+            lista.appendChild(listItem);
+
+            diaSemanaSelect.value = '';
+            horarioInput.value = '';
+        } else {
+            alert('Por favor, selecione um dia e um horário.');
+        }
+    });
+
+    function removeDisponibilidade(button, dia, horario) {
+        const index = disponibilidadesData.findIndex(d => d.diaSemana === dia && d.horario === horario);
+        if (index > -1) disponibilidadesData.splice(index, 1);
+        button.closest('li').remove();
+    }
     </script>
 </body>
 </html>
