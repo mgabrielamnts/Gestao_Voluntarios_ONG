@@ -23,38 +23,46 @@
               <div class="input-group">
                   <div class="form-group col-span-full">
                       <label for="nome">Nome Completo *</label>
-                      <input type="text" id="nome" name="nome" required class="input-field">
+                      <input type="text" maxlength="255" id="nome" name="nome" required class="form-control">
                   </div>
                   <div class="form-group">
                       <label for="profissao">Profissão *</label>
-                      <input type="text" id="profissao" name="profissao" required class="input-field">
+                      <input type="text" id="profissao" name="profissao" required class="form-control">
                   </div>
                   <div class="form-group">
-                      <label for="registro_conselho">Registro no Conselho (CRM, CRP etc.)</label>
-                      <input type="text" id="registro_conselho" name="registro_conselho" class="input-field">
+                      <label for="registro_conselho">Registro no Conselho (CRM, CRP etc.) *</label>
+                      <input type="text" maxlength="50" id="registro_conselho" name="registro_conselho" class="form-control">
                   </div>
                   <div class="form-group">
                       <label for="cpf">CPF *</label>
-                      <input type="text" id="cpf" name="cpf" required class="input-field">
+                      <input type="text" maxlength="11" id="cpf" name="cpf" required class="form-control">
                   </div>
               </div>
           </div>
 
           <!-- SEÇÃO 2: CONTATOS -->
           <div class="section">
-              <h2>2. Contatos</h2>
+              <h2>2. Contatos</h2>  
               <div class="input-group input-group-contact">
                   <div class="form-group">
                       <label for="telefone_pessoal">Telefone Pessoal (Celular) *</label>
-                      <input type="tel" id="telefone_pessoal" name="telefone_pessoal" required class="input-field">
-                  </div>
-                  <div class="form-group">
-                      <label for="telefone_consultorio">Telefone do Consultório</label>
-                      <input type="tel" id="telefone_consultorio" name="telefone_consultorio" class="input-field">
-                  </div>
-                  <div class="form-group">
+                      <input type="tel" maxlength="11" placeholder="Digite apenas os números" id="telefone_pessoal" name="telefone_pessoal" required class="form-control">
+
                       <label for="email">E-mail *</label>
-                      <input type="text" id="email" name="email" required class="input-field">
+                      <input type="email" maxlength="50" id="email" name="email" required class="form-control">
+                      
+                      <label for="contato_outro">Outro</label>
+                      <input type="tel" inputmode="numeric" pattern="[0-9]" maxlength="11" placeholder="Digite apenas os números" id="contato_outro" name="contato_outro" class="form-control">
+                  </div>
+                  <div class="form-group" style="margin-left: 3rem;">
+                    <label for="telefone_pessoal">Desc. do telefone pessoal</label>
+                    <input type="text" id="telefone_pessoal_descricao" name="telefone_pessoal_descricao" class="form-control" style="width: 200%";>
+
+                    <label for="telefone_residencial_descricao">Desc. do telefone residencial</label>
+                    <input type="text" id="telefone_residencial_descricao" name="telefone_residencial_descricao" class="form-control" style="width: 200%";>
+
+                    <label for="contato_outro_descricao">Desc. do outro contato</label>
+                    <input type="text" id="contato_outro_descricao" name="contato_outro_descricao" class="form-control" style="width: 200%";>
                   </div>
               </div>
           </div>
@@ -65,27 +73,27 @@
               <div class="input-group input-group-address">
                   <div class="form-group">
                       <label for="cep">CEP *</label>
-                      <input type="text" id="cep" name="cep" required class="input-field" maxlength="9">
+                      <input type="text" id="cep" name="cep" required class="form-control" maxlength="9">
                   </div>
                   <div class="form-group col-span-full col-span-3-md">
-                      <label for="logradouro">Logradouro *</label>
-                      <input type="text" id="logradouro" name="logradouro" required class="input-field">
+                      <label for="logradouro">Logradouro </label>
+                      <input type="text" id="logradouro" name="logradouro" required class="form-control">
                   </div>
                   <div class="form-group">
-                      <label for="numero_residencial">Número *</label>
-                      <input type="text" id="numero_residencial" name="numero_residencial" required class="input-field">
+                      <label for="numero_residencial">Número </label>
+                      <input type="tel" maxlength="4" inputmode="numeric" pattern="[0-9]" id="numero_residencial" name="numero_residencial" required class="form-control">
                   </div>
                   <div class="form-group">
                       <label for="complemento">Complemento</label>
-                      <input type="text" id="complemento" name="complemento" class="input-field">
+                      <input type="text" id="complemento" name="complemento" class="form-control">
                   </div>
                   <div class="form-group col-span-full col-span-2-md">
                       <label for="bairro">Bairro *</label>
-                      <input type="text" id="bairro" name="bairro" required class="input-field">
+                      <input type="text" id="bairro" name="bairro" required class="form-control">
                   </div>
                   <div class="form-group">
                       <label for="cidade">Cidade *</label>
-                      <input type="text" id="cidade" name="cidade" required class="input-field">
+                      <input type="text" id="cidade" name="cidade" required class="form-control">
                   </div>
               </div>
           </div>
@@ -97,7 +105,7 @@
               <div class="form-group" style="margin-bottom: 1.5rem;">
                   <label for="horas_semanais_disponiveis">Horas Semanais Disponíveis (Estimativa)</label>
                   <input type="number" id="horas_semanais_disponiveis" name="horas_semanais_disponiveis"
-                         min="1" max="168" class="input-field col-span-1-half-md">
+                         min="1" max="168" class="form-control col-span-1-half-md">
               </div>
 
               <div style="margin-bottom: 2rem;">
@@ -120,7 +128,7 @@
               <div>
                   <label class="block-label" style="margin-bottom: 0.5rem;">Disponibilidade de Horários</label>
                   <div class="disponibilidade-adder">
-                      <select id="dia_semana" class="input-field" style="flex: 1.5;">
+                      <select id="dia_semana" class="form-control" style="flex: 1.5;">
                           <option value="null">Selecione o dia</option>
                           <option value="1">Segunda-feira</option>
                           <option value="2">Terça-feira</option>
@@ -128,7 +136,7 @@
                           <option value="4">Quinta-feira</option>
                           <option value="5">Sexta-feira</option>
                       </select>
-                      <input type="time" id="horario" class="input-field" style="flex: 1;">
+                      <input type="time" id="horario" class="form-control" style="flex: 1;">
                       <button type="button" id="btnAddDisponibilidade" class="btn"
                               style="background-color: var(--cor4); color: white; padding: 0.5rem 1rem;">
                           Adicionar
@@ -149,15 +157,16 @@
         const diaSemanaSelect = document.getElementById('dia_semana');
         const horarioInput = document.getElementById('horario');
 
+        const diaSemanaTexto = diaSemanaSelect.options[diaSemanaSelect.selectedIndex].text;
         const diaSemana = diaSemanaSelect.value;
         const horario = horarioInput.value;
 
-        if (diaSemana && horario) {
+        if (diaSemana !== "null" && diaSemana !== "" && horario) {
             disponibilidadesData.push({ diaSemana: diaSemana, horario: horario });
 
             const lista = document.getElementById('listaDisponibilidades');
             const listItem = document.createElement('li');
-            const textoDisplay = `✅ ${diaSemana}: ${horario}`;
+            const textoDisplay = `✅ ${diaSemanaTexto}: ${horario}`;
             listItem.innerHTML = `
                 <span>${textoDisplay}</span>
                 <button type="button" onclick="removeDisponibilidade(this, '${diaSemana}', '${horario}')"
@@ -167,7 +176,7 @@
             `;
             lista.appendChild(listItem);
 
-            diaSemanaSelect.value = '';
+            diaSemanaSelect.value = 'null';
             horarioInput.value = '';
         } else {
             alert('Por favor, selecione um dia e um horário.');
@@ -180,123 +189,23 @@
         button.closest('li').remove();
     }
 
-    // --- COLETAR DADOS DO FORMULÁRIO ---
-    function collectFormData(form) {
-        const data = {
-            nome: form.nome.value,
-            profissao: form.profissao.value,
-            registroConselho: form.registro_conselho.value || null,
-            rg: form.rg.value,
-            cpf: form.cpf.value.replace(/[^0-9]/g, ''),
-            horasSemanaisDisponiveis: form.horas_semanais_disponiveis.value
-                ? parseInt(form.horas_semanais_disponiveis.value) : null,
-        endereco: {
-            cep: form.cep.value.replace(/[^0-9]/g, ''),
-            logradouro: form.logradouro.value,
-            numero: form.numero_residencial.value.trim(),
-            complemento: form.complemento.value || null,
-            bairro: form.bairro.value,
-            cidade: form.cidade.value,
-}
-        };
-
-        data.telefones = [{
-            telefonePessoal: form.telefone_pessoal.value.replace(/[^0-9]/g, ''),
-            email: form.email.value || null,
-            telefoneConsultorio: form.telefone_consultorio.value.replace(/[^0-9]/g, '') || null,
-        }];
-
-        data.disponibilidades = disponibilidadesData;
-
-        data.areas = Array.from(document.querySelectorAll('input[name="areas"]:checked'))
-                         .map(cb => parseInt(cb.value));
-
-        return data;
-    }
-
-    // ---  ENVIAR PARA A API ---
-    const API_URL = 'http://localhost:8080/api/voluntarios';
-
-    document.getElementById('voluntarioForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const form = e.target;
-        const submitButton = form.querySelector('.btn-primary');
-        const originalButtonText = submitButton.textContent;
-
-        document.querySelectorAll('.error-message').forEach(el => el.remove());
-
-        const requestData = collectFormData(form);
-        console.log(requestData); //mod aqui
-
-        if (requestData.areas.length === 0) {
-            alert('Por favor, selecione pelo menos uma Área de Atuação.');
-            return;
-        }
-        if (requestData.disponibilidades.length === 0) {
-            alert('Por favor, adicione pelo menos um Horário de Disponibilidade.');
-            return;
-        }
-
-        try {
-            submitButton.textContent = 'Enviando...';
-            submitButton.disabled = true;
-
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestData)
-            });
-
-            if (response.ok) {
-                alert('✅ Cadastro realizado com sucesso! Em breve entraremos em contato.');
-                form.reset();
-                disponibilidadesData = [];
-                document.getElementById('listaDisponibilidades').innerHTML = '';
-            } else {
-                const errorBody = await response.json();
-                console.log("ERRO BACKEND:", errorBody);
-                if (errorBody.status === 400 && errorBody.errors) {
-                    const errorDiv = createErrorElement('Erro de Validação: Verifique os campos abaixo:');
-                    const errorList = document.createElement('ul');
-                    errorList.style.cssText = 'color:inherit; list-style:disc; margin-left:20px;';
-                    errorBody.errors.forEach(err => {
-                        const li = document.createElement('li');
-                        li.textContent = err;
-                        errorList.appendChild(li);
-                    });
-                    errorDiv.appendChild(errorList);
-                    form.prepend(errorDiv);
-                    alert('Falha no Cadastro. Verifique a lista de erros no topo do formulário.');
-                } else if (errorBody.status === 409) {
-                    form.prepend(createErrorElement(`Erro: ${errorBody.error}`));
-                    alert(`Falha no Cadastro: ${errorBody.error}`);
-                } else {
-                    form.prepend(createErrorElement(`Erro da API: ${errorBody.error || 'Erro interno'}`));
-                    alert(`Falha no Cadastro: ${errorBody.error || 'Erro interno'}`);
-                }
-            }
-        } catch (error) {
-            console.error('Erro de conexão:', error);
-            alert('❌ Erro de conexão.');
-        } finally {
-            submitButton.textContent = originalButtonText;
-            submitButton.disabled = false;
-        }
-    });
-
-    function createErrorElement(text) {
-        const div = document.createElement('div');
-        div.className = 'error-message';
-        div.style.cssText = 'padding:1rem; margin-bottom:1rem; background:#fde2e2; color:#c0392b; border-radius:0.5rem; border:1px solid #f99;';
-        div.innerHTML = `<p style="font-weight:600;">${text}</p>`;
-        return div;
-    }
-
+    // --- VALIDAÇÃO DE CAMPOS OBRIGATÓRIOS ---
     const requiredFields = document.querySelectorAll('[required]');
     requiredFields.forEach(field => {
-        field.addEventListener('invalid', () => field.setCustomValidity('Por favor, preencha este campo obrigatório.'));
-        field.addEventListener('input', () => field.setCustomValidity(''));
+        field.addEventListener('invalid', (e) => {
+            // Verifica se o erro é especificamente porque o campo está vazio
+            if (e.target.validity.valueMissing) {
+                e.target.setCustomValidity('Por favor, preencha este campo obrigatório.');
+            } else {
+                // Se o erro for outro (ex: formato incorreto), deixa o navegador usar a mensagem padrão
+                e.target.setCustomValidity(''); 
+            }
+        });
+
+        field.addEventListener('input', (e) => {
+            // Limpa o erro customizado assim que o usuário começa a digitar
+            e.target.setCustomValidity('');
+        });
     });
   </script>
 </body>

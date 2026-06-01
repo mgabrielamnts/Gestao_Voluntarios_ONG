@@ -44,7 +44,7 @@
                 <div class="status-toggle">
                     <div class="status-option active" onclick="setStatusFilter('todos', this)">Todos</div>
                     <div class="status-option" onclick="setStatusFilter('ativos', this)">Ativos</div>
-                    <div class="status-option" onclick="setStatusFilter('inativos', this)">Inativos</div>
+                    <div class="status-option" onclick="setStatusFilter('desativados', this)">Desativados</div>
                     <div class="status-option" onclick="setStatusFilter('pendentes', this)">Pendentes</div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                         <td class="col-email">AnaSouza@gmail.com</td>
                         <td class="col-nome">Dra. Ana Souza</td>
                         <td class="center-text col-perfil">Voluntário</td>
-                        <td class="center-text" data-status="inativo"><span class="badge-status inactive">Inativo</span></td>
+                        <td class="center-text" data-status="desativado"><span class="badge-status inactive">Desativado</span></td>
                         <td class="center-text">
                             <button class="btn-action btn-edit" onclick="openEditModal(this)">
                                 <i data-lucide="pencil" size="16"></i>
@@ -137,7 +137,7 @@
                             <input type="text" class="form-control" id="profissao" required>
                         </div>
                         <div class="input-wrapper">
-                            <label>Registro Conselho (CRM/CRP)</label>
+                            <label>Registro Conselho (CRM/CRP) <span>*</span></label>
                             <input type="text" class="form-control" id="registro">
                         </div>
                         <div class="input-wrapper">
@@ -148,11 +148,11 @@
 
                     <!-- 2. Contatos -->
                     <div class="section-header">
-                        <i data-lucide="phone"></i> 2. Contatos
+                        <i data-lucide="phone"></i> 2. Contatos <span>*</span>
                     </div>
                     <div class="form-grid form-grid-3">
                         <div class="input-wrapper">
-                            <label>Celular (Pessoal) <span>*</span></label>
+                            <label>Celular (Pessoal)</label>
                             <input type="tel" class="form-control" id="tel_pessoal" required>
                         </div>
                         <div class="input-wrapper">
@@ -160,7 +160,7 @@
                             <input type="tel" class="form-control" id="tel_consultorio">
                         </div>
                         <div class="input-wrapper">
-                            <label>E-mail <span>*</span></label>
+                            <label>E-mail</label>
                             <input type="text" class="form-control" id="email" required>
                         </div>
                     </div>
@@ -175,11 +175,11 @@
                             <input type="text" class="form-control" id="cep" required>
                         </div>
                         <div class="input-wrapper col-span-3">
-                            <label>Logradouro <span>*</span></label>
+                            <label>Logradouro</label>
                             <input type="text" class="form-control" id="logradouro" required>
                         </div>
                         <div class="input-wrapper">
-                            <label>Número <span>*</span></label>
+                            <label>Número </label>
                             <input type="text" class="form-control" id="numero" required>
                         </div>
                         <div class="input-wrapper col-span-2">
@@ -194,23 +194,23 @@
 
                     <!-- 4. Disponibilidade -->
                     <div class="section-header">
-                        <i data-lucide="calendar-clock"></i> 4. Disponibilidade
+                        <i data-lucide="calendar-clock"></i> 4. Disponibilidade <span>*</span>
                     </div>
                     <div class="form-grid form-grid-2">
                         <div class="input-wrapper">
                             <label>Horas Semanais</label>
-                            <input type="number" class="form-control" id="dia_semana">
+                            <input type="number" class="form-control" id="horas_semanais">
                         </div>
                         <div class="input-wrapper">
                             <label>Selecione o dia</label>
                             <div style="display: flex; gap: 5px;">
-                                <select class="form-control" style="flex:1;">
-                                     <option value="null">Selecione o dia</option>
-                                    <option value="Segunda-feira">Segunda-feira</option>
-                                    <option value="Terça-feira">Terça-feira</option>
-                                    <option value="Quarta-feira">Quarta-feira</option>
-                                    <option value="Quinta-feira">Quinta-feira</option>
-                                    <option value="Sexta-feira">Sexta-feira</option>
+                                <select class="form-control" id="dia_semana" style="flex:1;">
+                                    <option value="null">Selecione o dia</option>
+                                    <option value="1">Segunda-feira</option>
+                                    <option value="2">Terça-feira</option>
+                                    <option value="3">Quarta-feira</option>
+                                    <option value="4">Quinta-feira</option>
+                                    <option value="5">Sexta-feira</option>
                                 </select>
                                 <input type="time" id= "horario" class="form-control" style="width: 100px;">
                                 <button type="button" id="btn-novo" class="btn-modal" style="background-color: var(--cor4); color: white; padding: 0.5rem 1rem;">
@@ -311,7 +311,7 @@
                     matchesStatus = true;
                 } else if (filtroStatusAtual === 'ativos' && statusDaLinha === 'ativo') {
                     matchesStatus = true;
-                } else if (filtroStatusAtual === 'inativos' && statusDaLinha === 'inativo') {
+                } else if (filtroStatusAtual === 'desativados' && statusDaLinha === 'desativado') {
                     matchesStatus = true;
                 }
 
@@ -337,33 +337,40 @@
         const diaSemanaSelect = document.getElementById('dia_semana');
         const horarioInput = document.getElementById('horario');
 
-        const diaSemana = diaSemanaSelect.value;
+        const diaSemanaTexto = diaSemanaSelect.options[diaSemanaSelect.selectedIndex].text;
+        const diaSemanaValor = diaSemanaSelect.value;
         const horario = horarioInput.value;
 
-        if (diaSemana && horario) {
-            disponibilidadesData.push({ diaSemana: diaSemana, horario: horario });
+        // Verifica se selecionou um dia válido e um horário
+        if (diaSemanaValor !== "null" && diaSemanaValor !== "" && horario) {
+            
+            disponibilidadesData.push({ diaSemana: diaSemanaValor, horario: horario });
 
             const lista = document.getElementById('listaDisponibilidades');
             const listItem = document.createElement('li');
-            const textoDisplay = `✅ ${diaSemana}: ${horario}`;
+            
+            // Mostra o dia e o horário na interface
+            const textoDisplay = `✅ ${diaSemanaTexto}: ${horario}`;
+            
             listItem.innerHTML = `
                 <span>${textoDisplay}</span>
-                <button type="button" onclick="removeDisponibilidade(this, '${diaSemana}', '${horario}')"
+                <button type="button" onclick="removeDisponibilidade(this, '${diaSemanaValor}', '${horario}')"
                     style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">
                     (Remover)
                 </button>
             `;
             lista.appendChild(listItem);
 
-            diaSemanaSelect.value = '';
+            // Limpa os campos de dia e horário. 
+            diaSemanaSelect.value = 'null';
             horarioInput.value = '';
         } else {
             alert('Por favor, selecione um dia e um horário.');
         }
     });
 
-    function removeDisponibilidade(button, dia, horario) {
-        const index = disponibilidadesData.findIndex(d => d.diaSemana === dia && d.horario === horario);
+    function removeDisponibilidade(button, diaValor, horario) {
+        const index = disponibilidadesData.findIndex(d => d.diaSemana === diaValor && d.horario === horario);
         if (index > -1) disponibilidadesData.splice(index, 1);
         button.closest('li').remove();
     }
