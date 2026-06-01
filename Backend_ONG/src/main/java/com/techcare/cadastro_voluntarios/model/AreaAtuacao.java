@@ -1,48 +1,48 @@
-package com.techcare.cadastro_voluntarios.model;
+package com.gaa.backend.model;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 
-
+/**
+ * Entidade que representa uma área de atuação disponível
+ * para os voluntários no sistema.
+ *
+ * Exemplos:
+ * - Psicologia
+ * - Direito
+ * - Assistência Social
+ *
+ * Essa entidade é utilizada para classificar e organizar
+ * os voluntários conforme suas especialidades.
+ */
+@Data
 @Entity
-@Table(name = "area_atuacao")
 public class AreaAtuacao {
 
+    /**
+     * Identificador único da área de atuação.
+     *
+     * Estratégia IDENTITY:
+     * - O banco de dados gera automaticamente (auto-increment)
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idArea;
+    private Long id;
 
-    @Column(nullable = false, unique = true)
+    /**
+     * Nome da área de atuação.
+     *
+     * Regra de negócio:
+     * - Deve representar uma especialidade clara
+     * - Idealmente única no sistema (evitar duplicidade)
+     *
+     * Exemplo:
+     * "Psicologia", "Educação", "Saúde"
+     *
+     * Observação:
+     * Pode futuramente receber constraint UNIQUE no banco
+     * para evitar áreas duplicadas.
+     */
+    @Column(nullable = false, unique = true, length = 100)
     private String nomeArea;
-
-    @JsonIgnore
-    @ManyToMany(mappedBy = "areas")
-    private List<Voluntario> voluntarios = new ArrayList<>();
-
-
-    public Integer getIdArea() {
-        return idArea;
-    }
-
-    public void setIdArea(Integer idArea) {
-        this.idArea = idArea;
-    }
-
-    public String getNomeArea() {
-        return nomeArea;
-    }
-
-    public void setNomeArea(String nomeArea) {
-        this.nomeArea = nomeArea;
-    }
-
-    public List<Voluntario> getVoluntarios() {
-        return voluntarios;
-    }
-
-    public void setVoluntarios(List<Voluntario> voluntarios) {
-        this.voluntarios = voluntarios;
-    }
 }
