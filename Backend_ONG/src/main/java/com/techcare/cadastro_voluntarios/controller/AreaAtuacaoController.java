@@ -1,38 +1,71 @@
-package com.techcare.cadastro_voluntarios.controller;
+package com.gaa.backend.controller;
 
-import com.techcare.cadastro_voluntarios.model.AreaAtuacao;
-import com.techcare.cadastro_voluntarios.service.AreaAtuacaoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import com.gaa.backend.dto.request.AreaAtuacaoRequestDTO;
+import com.gaa.backend.dto.response.AreaAtuacaoResponseDTO;
+import com.gaa.backend.mapper.AreaAtuacaoMapper;
+import com.gaa.backend.model.AreaAtuacao;
+import com.gaa.backend.service.AreaAtuacaoService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+/**
+ * Controller responsável pelo gerenciamento de áreas de atuação.
+ */
 @RestController
-@RequestMapping("/api/areas")
+@RequestMapping("/areas-atuacao")
 public class AreaAtuacaoController {
 
-    @Autowired
-    private AreaAtuacaoService service;
+    private final AreaAtuacaoService areaAtuacaoService;
+
+    public AreaAtuacaoController(
+            AreaAtuacaoService areaAtuacaoService
+    ) {
+        this.areaAtuacaoService = areaAtuacaoService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<AreaAtuacao>> listarTodas() {
-        return ResponseEntity.ok(service.listarTodas());
+    public List<AreaAtuacaoResponseDTO> listarTodos() {
+
+        return areaAtuacaoService.listarTodos()
+                .stream()
+                .map(AreaAtuacaoMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AreaAtuacao> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
+    public AreaAtuacaoResponseDTO buscarPorId(
+            @PathVariable Long id
+    ) {
+
+        return AreaAtuacaoMapper.toResponseDTO(
+                areaAtuacaoService.buscarPorId(id)
+        );
     }
 
     @PostMapping
-    public ResponseEntity<AreaAtuacao> salvar(@RequestBody AreaAtuacao area) {
-        return ResponseEntity.ok(service.salvar(area));
+    @ResponseStatus(HttpStatus.CREATED)
+    public AreaAtuacaoResponseDTO salvar(
+            @RequestBody AreaAtuacaoRequestDTO dto
+    ) {
+        AreaAtuacao area = AreaAtuacaoMapper.toEntity(dto);
+        return AreaAtuacaoMapper.toResponseDTO(areaAtuacaoService.salvar(area));
+    }
+
+    @PutMapping("/{id}")
+    public AreaAtuacaoResponseDTO atualizar(
+            @PathVariable Long id,
+            @RequestBody AreaAtuacaoRequestDTO dto
+    ) {
+        AreaAtuacao area = AreaAtuacaoMapper.toEntity(dto);
+        return AreaAtuacaoMapper.toResponseDTO(areaAtuacaoService.atualizar(id, area));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
+        areaAtuacaoService.deletar(id);
     }
 }
