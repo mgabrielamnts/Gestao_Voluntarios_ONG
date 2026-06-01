@@ -12,6 +12,7 @@ import com.gaa.backend.repository.VoluntarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class VoluntarioService {
                 .orElseThrow(() -> new ResourceNotFoundException("Voluntário não encontrado"));
     }
 
+    @Transactional
     public Voluntario salvar(VoluntarioRequestDTO dto) {
 
         Voluntario voluntario = VoluntarioMapper.toEntity(dto);
@@ -70,6 +72,7 @@ public class VoluntarioService {
         return voluntarioRepository.save(voluntario);
     }
 
+    @Transactional
     public Voluntario atualizar(Long id, VoluntarioRequestDTO dto) {
 
         Voluntario voluntario = buscarPorId(id);
@@ -93,9 +96,10 @@ public class VoluntarioService {
             voluntario.setAreas(areas);
         }
 
-        return voluntarioRepository.save(voluntario); // fix: save() estava faltando
+        return voluntarioRepository.save(voluntario);
     }
 
+    @Transactional
     public void deletar(Long id) {
         Voluntario voluntario = buscarPorId(id);
         voluntarioRepository.delete(voluntario);
