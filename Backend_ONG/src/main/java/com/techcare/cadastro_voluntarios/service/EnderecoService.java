@@ -4,11 +4,11 @@ package com.gaa.backend.service;
  * Service responsável pelas regras de negócio da aplicação.
  */
 
-
 import com.gaa.backend.exception.ResourceNotFoundException;
 import com.gaa.backend.model.Endereco;
 import com.gaa.backend.repository.EnderecoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,10 +30,12 @@ public class EnderecoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Endereço não encontrado"));
     }
 
+    @Transactional
     public Endereco salvar(Endereco endereco) {
         return enderecoRepository.save(endereco);
     }
 
+    @Transactional
     public Endereco atualizar(Long id, Endereco enderecoAtualizado) {
 
         Endereco endereco = buscarPorId(id);
@@ -48,6 +50,7 @@ public class EnderecoService {
         return enderecoRepository.save(endereco);
     }
 
+    @Transactional
     public void deletar(Long id) {
 
         Endereco endereco = buscarPorId(id);
