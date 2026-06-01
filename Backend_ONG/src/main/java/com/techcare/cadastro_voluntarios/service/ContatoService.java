@@ -4,11 +4,11 @@ package com.gaa.backend.service;
  * Service responsável pelas regras de negócio da aplicação.
  */
 
-
 import com.gaa.backend.exception.ResourceNotFoundException;
 import com.gaa.backend.model.Contato;
 import com.gaa.backend.repository.ContatoRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,10 +30,12 @@ public class ContatoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Contato não encontrado"));
     }
 
+    @Transactional
     public Contato salvar(Contato contato) {
         return contatoRepository.save(contato);
     }
 
+    @Transactional
     public Contato atualizar(Long id, Contato contatoAtualizado) {
 
         Contato contato = buscarPorId(id);
@@ -45,6 +47,7 @@ public class ContatoService {
         return contatoRepository.save(contato);
     }
 
+    @Transactional
     public void deletar(Long id) {
 
         Contato contato = buscarPorId(id);
