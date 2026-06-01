@@ -4,11 +4,11 @@ package com.gaa.backend.service;
  * Service responsável pelas regras de negócio da aplicação.
  */
 
-
 import com.gaa.backend.exception.ResourceNotFoundException;
 import com.gaa.backend.model.Disponibilidade;
 import com.gaa.backend.repository.DisponibilidadeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,10 +30,12 @@ public class DisponibilidadeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Disponibilidade não encontrada"));
     }
 
+    @Transactional
     public Disponibilidade salvar(Disponibilidade disponibilidade) {
         return disponibilidadeRepository.save(disponibilidade);
     }
 
+    @Transactional
     public Disponibilidade atualizar(Long id, Disponibilidade disponibilidadeAtualizada) {
 
         Disponibilidade disponibilidade = buscarPorId(id);
@@ -44,6 +46,7 @@ public class DisponibilidadeService {
         return disponibilidadeRepository.save(disponibilidade);
     }
 
+    @Transactional
     public void deletar(Long id) {
 
         Disponibilidade disponibilidade = buscarPorId(id);
