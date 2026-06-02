@@ -1,62 +1,63 @@
-package com.techcare.cadastro_voluntarios.controller;
+package com.gaa.backend.controller;
 
-import com.techcare.cadastro_voluntarios.dto.VoluntarioRequest;
-import com.techcare.cadastro_voluntarios.dto.VoluntarioResponse;
-import com.techcare.cadastro_voluntarios.dto.VoluntarioUpdateRequest;
-import com.techcare.cadastro_voluntarios.service.VoluntarioService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import com.gaa.backend.dto.request.VoluntarioRequestDTO;
+import com.gaa.backend.dto.response.VoluntarioResponseDTO;
+import com.gaa.backend.mapper.VoluntarioMapper;
+import com.gaa.backend.model.Voluntario;
+import com.gaa.backend.service.VoluntarioService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import jakarta.validation.Valid;
-import java.net.URI;
-import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*") // <--- ADIÇÃO CRÍTICA PARA PERMITIR CONEXÃO DO FRONT-END
-@RequestMapping("/api/voluntarios")
+@RequestMapping("/voluntarios")
 public class VoluntarioController {
 
-    @Autowired
-    private VoluntarioService service;
+    private final VoluntarioService voluntarioService;
+
+    public VoluntarioController(VoluntarioService voluntarioService) {
+        this.voluntarioService = voluntarioService;
+    }
 
     @GetMapping
-    public ResponseEntity<List<VoluntarioResponse>> listarTodos() {
-        return ResponseEntity.ok(service.listarTodos());
+    public Page<VoluntarioResponseDTO> listarTodos(Pageable pageable) {
+
+        return voluntarioService
+                .listarTodos(pageable)
+                .map(VoluntarioMapper::toDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VoluntarioResponse> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.buscarPorId(id));
+    public VoluntarioResponseDTO buscarPorId(@PathVariable Long id) {
+
+        Voluntario voluntario = voluntarioService.buscarPorId(id);
+
+        return VoluntarioMapper.toDTO(voluntario);
     }
 
     @PostMapping
-    public ResponseEntity<VoluntarioResponse> salvar(@Valid @RequestBody VoluntarioRequest req) {
-        VoluntarioResponse criado = service.salvar(req);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-                .path("/{id}")
-                .buildAndExpand(criado.getIdVoluntario())
-                .toUri();
-        return ResponseEntity.created(uri).body(criado);
+    @ResponseStatus(HttpStatus.CREATED)
+    public VoluntarioResponseDTO salvar(
+            @RequestBody VoluntarioRequestDTO dto
+    ) {
+        Voluntario salvo = voluntarioService.salvar(dto);
+        return VoluntarioMapper.toDTO(salvo);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VoluntarioResponse> atualizar(@PathVariable Integer id,
-                                                        @RequestBody VoluntarioUpdateRequest req) {
-        return ResponseEntity.ok(service.atualizar(id, req));
+    public VoluntarioResponseDTO atualizar(
+            @PathVariable Long id,
+            @RequestBody VoluntarioRequestDTO dto
+    ) {
+        Voluntario atualizado = voluntarioService.atualizar(id, dto);
+        return VoluntarioMapper.toDTO(atualizado);
     }
-
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        service.deletar(id);
-        return ResponseEntity.noContent().build();
-    }
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deletar(@PathVariable Long id) {
 
-    @PatchMapping("/{id}/reativar")
-    public ResponseEntity<VoluntarioResponse> reativar(@PathVariable Integer id) {
-        return ResponseEntity.ok(service.reativar(id));
+        voluntarioService.deletar(id);
     }
-
-} // fim do codigo
+}

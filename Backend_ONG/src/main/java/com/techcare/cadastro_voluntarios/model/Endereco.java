@@ -1,66 +1,69 @@
-package com.techcare.cadastro_voluntarios.model;
+package com.gaa.backend.model;
 
+import com.gaa.backend.enums.Estado;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
 
+/**
+ * Entidade que representa uma localização frequentada pelos voluntários no sistema.
+ *
+ * Exemplos:
+ * - Consultório A;
+ * - Consultário B;
+ * - Moradia Pessoal.
+ *
+ * Essa entidade é utilizada para armazenar e organizar
+ * as localidades dispostas pelos voluntários registrados.
+ */
+@Data
 @Entity
-@Table(name = "endereco")
 public class Endereco {
 
+    /**
+     * Identificador único do voluntário.
+     *
+     * Estratégia IDENTITY:
+     * - O banco de dados é responsável por gerar o ID automaticamente
+     * - Geralmente utilizado com auto-increment
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idEndereco;
+    private Long id;
 
+    /**
+     * Armazena os dados (CEP, logadouro, número, bairro e cidade, estado) da localidade informada.
+     */
+    @NotBlank
+    @Column(length = 8)
+    private String cep;
+
+    @NotBlank
+    @Column(length = 255)
+    private String logradouro;
+
+    @Column(length = 100, nullable = false)
+    private String bairro;
+
+    @Column(length = 100, nullable = false)
+    private String cidade;
+
+    @Column(length = 10)
+    private String numero;
+
+    @Enumerated(EnumType.STRING)
+    private Estado estado;
+
+    /**
+     * Registra complementos para referenciar a localização:
+     * Ex. Segundo andar de um consultório, oitava sala.
+     */
+    private String complemento;
+
+    @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "id_voluntario", nullable = false)
+    @JoinColumn(name = "id_voluntario")
     private Voluntario voluntario;
 
-    private String cep;
-    private String logradouro;
-    private String numero;
-    private String complemento;
-    private String bairro;
-    private String cidade;
-    private String estado;
-
-    public Endereco() { }
-
-    public Endereco(Voluntario voluntario, String cep, String logradouro,
-                    String numero, String complemento, String bairro,
-                    String cidade, String estado) {
-        this.voluntario = voluntario;
-        this.cep = cep;
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-    }
-
-    public Integer getIdEndereco() { return idEndereco; }
-    public void setIdEndereco(Integer idEndereco) { this.idEndereco = idEndereco; }
-
-    public Voluntario getVoluntario() { return voluntario; }
-    public void setVoluntario(Voluntario voluntario) { this.voluntario = voluntario; }
-
-    public String getCep() { return cep; }
-    public void setCep(String cep) { this.cep = cep; }
-
-    public String getLogradouro() { return logradouro; }
-    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
-
-    public String getNumero() { return numero; }
-    public void setNumero(String numero) { this.numero = numero; }
-
-    public String getComplemento() { return complemento; }
-    public void setComplemento(String complemento) { this.complemento = complemento; }
-
-    public String getBairro() { return bairro; }
-    public void setBairro(String bairro) { this.bairro = bairro; }
-
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
-
-    public String getEstado() { return estado; }
-    public void setEstado(String estado) { this.estado = estado; }
 }

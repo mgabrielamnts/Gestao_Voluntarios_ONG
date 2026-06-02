@@ -1,13 +1,12 @@
-package com.techcare.cadastro_voluntarios;
+package com.gaa.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CadastroVoluntariosApplication {
+public class BackendApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(CadastroVoluntariosApplication.class, args);
+		SpringApplication.run(BackendApplication.class, args);
 	}
-
 }

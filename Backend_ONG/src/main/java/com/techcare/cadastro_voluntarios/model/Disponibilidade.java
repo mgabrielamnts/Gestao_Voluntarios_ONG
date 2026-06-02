@@ -1,42 +1,40 @@
-package com.techcare.cadastro_voluntarios.model;
+package com.gaa.backend.model;
 
+import com.gaa.backend.enums.DiaSemana;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
 import java.time.LocalTime;
 
+@Data
 @Entity
-@Table(name = "disponibilidade")
 public class Disponibilidade {
 
+    /**
+     * Identificador único do voluntário.
+     *
+     * Estratégia IDENTITY:
+     * - O banco de dados é responsável por gerar o ID automaticamente
+     * - Geralmente utilizado com autoincrement
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idDisponibilidade;
+    private Long id;
 
+    @Enumerated(EnumType.STRING)
+    private DiaSemana diaSemana;
+
+    /**
+     * Indica o horário do dia no formato 24h HH:MM através de um valor do tipo LocalTime.
+     */
+    @NotNull
+    private LocalTime horario;
+
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "id_voluntario")
     private Voluntario voluntario;
 
-    private String diaSemana;
-    private LocalTime horario;
-
-    public Disponibilidade() { }
-
-    public Disponibilidade(Integer idDisponibilidade, Voluntario voluntario,
-                           String diaSemana, LocalTime horario) {
-        this.idDisponibilidade = idDisponibilidade;
-        this.voluntario = voluntario;
-        this.diaSemana = diaSemana;
-        this.horario = horario;
-    }
-
-    public Integer getIdDisponibilidade() { return idDisponibilidade; }
-    public void setIdDisponibilidade(Integer idDisponibilidade) { this.idDisponibilidade = idDisponibilidade; }
-
-    public Voluntario getVoluntario() { return voluntario; }
-    public void setVoluntario(Voluntario voluntario) { this.voluntario = voluntario; }
-
-    public String getDiaSemana() { return diaSemana; }
-    public void setDiaSemana(String diaSemana) { this.diaSemana = diaSemana; }
-
-    public LocalTime getHorario() { return horario; }
-    public void setHorario(LocalTime horario) { this.horario = horario; }
 }

@@ -1,150 +1,107 @@
-package com.techcare.cadastro_voluntarios.service;
+package com.gaa.backend.service;
 
-import com.techcare.cadastro_voluntarios.dto.*;
-import com.techcare.cadastro_voluntarios.exception.*;
-import com.techcare.cadastro_voluntarios.mapper.VoluntarioMapper;
-import com.techcare.cadastro_voluntarios.model.*;
-import com.techcare.cadastro_voluntarios.repository.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.gaa.backend.dto.request.VoluntarioRequestDTO;
+import com.gaa.backend.exception.ResourceNotFoundException;
+import com.gaa.backend.mapper.VoluntarioMapper;
+import com.gaa.backend.model.AreaAtuacao;
+import com.gaa.backend.model.Contato;
+import com.gaa.backend.model.Endereco;
+import com.gaa.backend.model.Voluntario;
+import com.gaa.backend.repository.AreaAtuacaoRepository;
+import com.gaa.backend.repository.VoluntarioRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class VoluntarioService {
 
-    @Autowired
-    private VoluntarioRepository voluntarioRepo;
+    private final VoluntarioRepository voluntarioRepository;
+    private final AreaAtuacaoRepository areaAtuacaoRepository;
 
-    @Autowired
-    private AreaAtuacaoRepository areaRepo;
-
-    public List<VoluntarioResponse> listarTodos() {
-        return voluntarioRepo.findAll().stream()
-                .map(VoluntarioMapper::toResponse)
-                .collect(Collectors.toList());
+    public VoluntarioService(
+            VoluntarioRepository voluntarioRepository,
+            AreaAtuacaoRepository areaAtuacaoRepository
+    ) {
+        this.voluntarioRepository = voluntarioRepository;
+        this.areaAtuacaoRepository = areaAtuacaoRepository;
     }
 
-    public VoluntarioResponse buscarPorId(Integer id) {
-        Voluntario v = voluntarioRepo.findById(id)
+    public Page<Voluntario> listarTodos(Pageable pageable) {
+        return voluntarioRepository.findAll(pageable);
+    }
+
+    public Voluntario buscarPorId(Long id) {
+        return voluntarioRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Voluntário não encontrado"));
-        if (v.getAtivo() != null && !v.getAtivo()) {
-            throw new ResourceNotFoundException("Voluntário não encontrado");
-        }
-        return VoluntarioMapper.toResponse(v);
     }
 
     @Transactional
-    public VoluntarioResponse salvar(VoluntarioRequest req) {
-        if (voluntarioRepo.existsByCpf(req.getCpf())) {
-            throw new BusinessException("CPF já cadastrado");
-        }
+    public Voluntario salvar(VoluntarioRequestDTO dto) {
 
-        Voluntario v = VoluntarioMapper.toEntity(req);
-        v.setDataCadastro(LocalDate.now());
-        v.setAtivo(true);
+        Voluntario voluntario = VoluntarioMapper.toEntity(dto);
 
-        if (req.getAreas() != null && !req.getAreas().isEmpty()) {
-            List<AreaAtuacao> areas = areaRepo.findAllById(req.getAreas());
-            if (areas.size() != req.getAreas().size()) {
-                throw new BusinessException("Uma ou mais áreas inválidas");
+        // Resolve áreas a partir dos IDs informados
+        if (dto.getAreasAtuacaoIds() != null && !dto.getAreasAtuacaoIds().isEmpty()) {
+            List<AreaAtuacao> areas = new ArrayList<>();
+            for (Long areaId : dto.getAreasAtuacaoIds()) {
+                AreaAtuacao area = areaAtuacaoRepository.findById(areaId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Área de atuação não encontrada: " + areaId));
+                areas.add(area);
             }
-            v.setAreas(areas);
+            voluntario.setAreas(areas);
         }
 
-        Voluntario salvo = voluntarioRepo.save(v);
-        return VoluntarioMapper.toResponse(salvo);
-    }
-
-    @Transactional
-    public VoluntarioResponse atualizar(Integer id, VoluntarioUpdateRequest req) {
-        Voluntario v = voluntarioRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Voluntário não encontrado"));
-
-        if (v.getAtivo() != null && !v.getAtivo()) {
-            throw new BusinessException("Voluntário inativo não pode ser editado");
-        }
-
-        if (req.getNome() != null) v.setNome(req.getNome());
-        if (req.getProfissao() != null) v.setProfissao(req.getProfissao());
-        if (req.getRg() != null) v.setRg(req.getRg());
-        if (req.getRegistroConselho() != null) v.setRegistroConselho(req.getRegistroConselho());
-        if (req.getHorasSemanaisDisponiveis() != null) v.setHorasSemanaisDisponiveis(req.getHorasSemanaisDisponiveis());
-
-        // Endereço
-        if (req.getEndereco() != null) {
-            v.getEnderecos().clear();
-            EnderecoRequest e = req.getEndereco();
-            v.getEnderecos().add(new Endereco(v,
-                    e.getCep(), e.getLogradouro(), e.getNumero(),
-                    e.getComplemento(), e.getBairro(), e.getCidade(), e.getEstado()));
-        }
-
-        final Voluntario voluntarioFinal = v;
-
-        // Telefones
-        if (req.getTelefones() != null) {
-            v.getTelefones().clear();
-            req.getTelefones().forEach(t ->
-                    voluntarioFinal.getTelefones().add(new TelefoneVoluntario(null, voluntarioFinal,
-                            t.getTelefoneResidencial(),
-                            t.getTelefonePessoal(),
-                            t.getTelefoneConsultorio()))
-            );
-        }
-
-        // Disponibilidades
-        if (req.getDisponibilidades() != null) {
-            v.getDisponibilidades().clear();
-            req.getDisponibilidades().forEach(d ->
-                    voluntarioFinal.getDisponibilidades().add(new Disponibilidade(null, voluntarioFinal,
-                            d.getDiaSemana(),
-                            LocalTime.parse(d.getHorario())))
-            );
-        }
-
-        // Áreas
-        if (req.getAreas() != null) {
-            List<AreaAtuacao> areas = areaRepo.findAllById(req.getAreas());
-            if (areas.size() != req.getAreas().size()) {
-                throw new BusinessException("Uma ou mais áreas inválidas");
+        // Garante bidirecionalidade das relações
+        if (voluntario.getContatos() != null) {
+            for (Contato c : voluntario.getContatos()) {
+                c.setVoluntario(voluntario);
             }
-            v.setAreas(areas);
+        }
+        if (voluntario.getEnderecos() != null) {
+            for (Endereco e : voluntario.getEnderecos()) {
+                e.setVoluntario(voluntario);
+            }
         }
 
-        v = voluntarioRepo.save(v);
-        return VoluntarioMapper.toResponse(v);
+        return voluntarioRepository.save(voluntario);
     }
 
     @Transactional
-    public void deletar(Integer id) {
-        Voluntario v = voluntarioRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Voluntário não encontrado"));
+    public Voluntario atualizar(Long id, VoluntarioRequestDTO dto) {
 
-        if (v.getAtivo() != null && !v.getAtivo()) {
-            throw new BusinessException("Voluntário já inativo");
+        Voluntario voluntario = buscarPorId(id);
+
+        voluntario.setNome(dto.getNome());
+        voluntario.setProfissao(dto.getProfissao());
+        voluntario.setCpf(dto.getCpf());
+        voluntario.setRegistroConselho(dto.getRegistroConselho());
+        voluntario.setHorasSemanaisDisponiveis(dto.getHorasSemanaisDisponiveis());
+        voluntario.setStatus(dto.getStatus());
+
+        // Atualiza áreas
+        if (dto.getAreasAtuacaoIds() != null) {
+            List<AreaAtuacao> areas = new ArrayList<>();
+            for (Long areaId : dto.getAreasAtuacaoIds()) {
+                AreaAtuacao area = areaAtuacaoRepository.findById(areaId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Área de atuação não encontrada: " + areaId));
+                areas.add(area);
+            }
+            voluntario.setAreas(areas);
         }
 
-        v.setAtivo(false);
-        voluntarioRepo.save(v);
+        return voluntarioRepository.save(voluntario);
     }
 
     @Transactional
-    public VoluntarioResponse reativar(Integer id) {
-        Voluntario v = voluntarioRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Voluntário não encontrado"));
-
-        if (v.getAtivo() != null && v.getAtivo()) {
-            throw new BusinessException("Voluntário já está ativo");
-        }
-
-        v.setAtivo(true);
-        voluntarioRepo.save(v);
-
-        return VoluntarioMapper.toResponse(v);
+    public void deletar(Long id) {
+        Voluntario voluntario = buscarPorId(id);
+        voluntarioRepository.delete(voluntario);
     }
 }

@@ -90,7 +90,7 @@ body {
 
 .search-group { flex-grow: 1; position: relative; }
 .search-group input { width: 100%; padding-left: 2.8rem; }
-.search-icon { position: absolute; left: 14px; top: 38px; color: var(--cor2); }
+.search-icon { position: absolute; left: 13px; top: 35px; color: var(--cor2); }
 
 .status-toggle {
     display: flex; background-color: #f0f4f7; border-radius: 8px;
@@ -195,3 +195,4 @@ tr.hidden { display: none; }
 .btn-modal { padding: 0.8rem 1.6rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; display: flex; gap: 8px; align-items: center;}
 .btn-cancel { background-color: var(--cor1); border: 1px solid var(--cor8); color: var(--cor5); }
 .btn-save { background-color: var(--cor4); color: var(--cor1); }
+

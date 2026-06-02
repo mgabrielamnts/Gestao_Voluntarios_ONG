@@ -1,10 +1,12 @@
-package com.techcare.cadastro_voluntarios.service;
+package com.gaa.backend.service;
 
-import com.techcare.cadastro_voluntarios.exception.BusinessException;
-import com.techcare.cadastro_voluntarios.exception.ResourceNotFoundException;
-import com.techcare.cadastro_voluntarios.model.AreaAtuacao;
-import com.techcare.cadastro_voluntarios.repository.AreaAtuacaoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+/**
+ * Service responsável pelas regras de negócio da aplicação.
+ */
+
+import com.gaa.backend.exception.ResourceNotFoundException;
+import com.gaa.backend.model.AreaAtuacao;
+import com.gaa.backend.repository.AreaAtuacaoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,32 +15,41 @@ import java.util.List;
 @Service
 public class AreaAtuacaoService {
 
-    @Autowired
-    private AreaAtuacaoRepository areaRepo;
+    private final AreaAtuacaoRepository areaAtuacaoRepository;
 
-    public List<AreaAtuacao> listarTodas() {
-        return areaRepo.findAll();
+    public AreaAtuacaoService(AreaAtuacaoRepository areaAtuacaoRepository) {
+        this.areaAtuacaoRepository = areaAtuacaoRepository;
     }
 
-    public AreaAtuacao buscarPorId(Integer id) {
-        return areaRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Área não encontrada"));
+    public List<AreaAtuacao> listarTodos() {
+        return areaAtuacaoRepository.findAll();
     }
 
-    public AreaAtuacao salvar(AreaAtuacao area) {
-        return areaRepo.save(area);
+    public AreaAtuacao buscarPorId(Long id) {
+        return areaAtuacaoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Área de atuação não encontrada"));
     }
 
     @Transactional
-    public void deletar(Integer id) {
-        AreaAtuacao area = areaRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Área não encontrada"));
+    public AreaAtuacao salvar(AreaAtuacao areaAtuacao) {
+        return areaAtuacaoRepository.save(areaAtuacao);
+    }
 
-        // Antes de deletar, verificamos se tem voluntários ligados a ela
-        if (!area.getVoluntarios().isEmpty()) {
-            throw new BusinessException("Não é possível excluir: existe voluntário vinculado a esta área.");
-        }
+    @Transactional
+    public AreaAtuacao atualizar(Long id, AreaAtuacao areaAtualizada) {
 
-        areaRepo.delete(area);
+        AreaAtuacao area = buscarPorId(id);
+
+        area.setNomeArea(areaAtualizada.getNomeArea());
+
+        return areaAtuacaoRepository.save(area);
+    }
+
+    @Transactional
+    public void deletar(Long id) {
+
+        AreaAtuacao area = buscarPorId(id);
+
+        areaAtuacaoRepository.delete(area);
     }
 }

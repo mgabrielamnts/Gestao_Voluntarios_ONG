@@ -1,70 +1,81 @@
-package com.techcare.cadastro_voluntarios.exception;
+package com.gaa.backend.exception;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String,Object>> handleValidation(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getFieldErrors()
-                .stream()
-                .map(e -> e.getField() + ": " + e.getDefaultMessage())
-                .collect(Collectors.toList());
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleResourceNotFound(
+            ResourceNotFoundException ex,
+            HttpServletRequest request
+    ) {
 
-        Map<String,Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.BAD_REQUEST.value(),
-                "errors", errors
+        ApiErrorResponse error = new ApiErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                "Resource Not Found",
+                ex.getMessage(),
+                request.getRequestURI()
         );
-        return ResponseEntity.badRequest().body(body);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<Map<String,Object>> handleBusiness(BusinessException ex) {
-        Map<String,Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.CONFLICT.value(),
-                "error", ex.getMessage()
+    public ResponseEntity<ApiErrorResponse> handleBusinessException(
+            BusinessException ex,
+            HttpServletRequest request
+    ) {
+
+        ApiErrorResponse error = new ApiErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.BAD_REQUEST.value(),
+                "Business Exception",
+                ex.getMessage(),
+                request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+
+        return ResponseEntity.badRequest().body(error);
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String,Object>> handleNotFound(ResourceNotFoundException ex) {
-        Map<String,Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.NOT_FOUND.value(),
-                "error", ex.getMessage()
-        );
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
-    }
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<ApiErrorResponse> handleValidationException(
+            ValidationException ex,
+            HttpServletRequest request
+    ) {
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Map<String,Object>> handleDataIntegrity(DataIntegrityViolationException ex) {
-        Map<String,Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.BAD_REQUEST.value(),
-                "error", "Violação de integridade de dados"
+        ApiErrorResponse error = new ApiErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Validation Exception",
+                ex.getMessage(),
+                request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String,Object>> handleAll(Exception ex) {
-        Map<String,Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "error", "Erro interno"
+    public ResponseEntity<ApiErrorResponse> handleGenericException(
+            Exception ex,
+            HttpServletRequest request
+    ) {
+
+        ApiErrorResponse error = new ApiErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Internal Server Error",
+                ex.getMessage(),
+                request.getRequestURI()
         );
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+
+        return ResponseEntity.internalServerError().body(error);
     }
 }
