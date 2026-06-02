@@ -104,7 +104,7 @@ h2 {
 }
 
 label {
-  display: block;
+  display: auto;
   font-size: 0.875rem;
   font-weight: 500; 
   color: var(--cor5);

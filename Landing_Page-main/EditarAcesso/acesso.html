@@ -43,6 +43,7 @@
                 <label>Status:</label>
                 <div class="status-toggle">
                     <div class="status-option active" onclick="setStatusFilter('todos', this)">Todos</div>
+                    <div class="status-option" onclick="setStatusFilter('pendentes', this)">Pendentes</div>
                     <div class="status-option" onclick="setStatusFilter('ativos', this)">Ativos</div>
                     <div class="status-option" onclick="setStatusFilter('desativados', this)">Desativados</div>
                     <div class="status-option" onclick="setStatusFilter('pendentes', this)">Pendentes</div>
@@ -232,7 +233,7 @@
     </div>
 
     <script>
-         lucide.createIcons();
+           lucide.createIcons();
         const modal = document.getElementById('modalNovoAcesso');
         
         function openNewModal() {
