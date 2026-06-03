@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="acesso.css">
+    <link rel="shortcut icon" href="../Imagens/icone_logo.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">    
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Acesso Cadastro</title>
+</head>
+<body>
+<!-- PAINEL PRINCIPAL -->
+    <div class="card-container">
+        
+        <div class="header-row">
+            <h1 class="page-title">
+                <div class="icon-bg"><i data-lucide="users-round"></i></div>
+                Gestão de Acessos
+            </h1>
+            <!-- Botão que abre modal VAZIO -->
+            <button class="btn-novo" onclick="openNewModal()">
+                <i data-lucide="plus-circle"></i>
+                Novo Acesso
+            </button>
+        </div>
+
+        <div class="filters-row">
+            <div class="filter-group" style="min-width: 200px;">
+                <label>Filtro:</label>
+                <select class="form-control" id="searchFilter">
+                    <option value="nome">Nome</option>
+                    <option value="email">E-mail</option>
+                    <option value="perfil">Perfil</option>
+                </select>
+            </div>
+            <div class="filter-group search-group">
+                <label>Pesquisar:</label>
+                <div class="search-icon"><i data-lucide="search" size="18"></i></div>
+                <input type="text" class="form-control" id="searchInput" placeholder="Buscar por nome, e-mail, registro no conselho..." onkeyup="filterTable()">
+            </div>
+            <div class="filter-group">
+                <label>Status:</label>
+                <div class="status-toggle">
+                    <div class="status-option active" onclick="setStatusFilter('todos', this)">Todos</div>
+                    <div class="status-option" onclick="setStatusFilter('pendentes', this)">Pendentes</div>
+                    <div class="status-option" onclick="setStatusFilter('ativos', this)">Ativos</div>
+                    <div class="status-option" onclick="setStatusFilter('desativados', this)">Desativados</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela -->
+        <div class="table-wrapper" id="tableContainer">
+            <table id="accessTable">
+                <thead>
+                    <tr>
+                        <th width="30%">E-mail</th>
+                        <th width="30%">Nome</th>
+                        <th width="15%" class="center-text">Tipo de Usuário</th>
+                        <th width="10%" class="center-text">Status</th>
+                        <th width="15%" class="center-text">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- populado via JavaScript (GET /voluntarios) -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon"><i data-lucide="cone" size="48"></i></div>
+            <div class="empty-text">Nenhum item encontrado...</div>
+        </div>
+    </div>
+
+    <!-- MODAL (NOVO / EDITAR) -->
+    <div class="modal-overlay" id="modalNovoAcesso">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">
+                    <i data-lucide="user-plus"></i> Novo Voluntário
+                </div>
+                <button class="btn-close" id="btnCloseX"><i data-lucide="x"></i></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="formVoluntario">
+                    
+                    <!-- 1. Dados Pessoais -->
+                    <div class="section-header">
+                        <i data-lucide="user"></i> 1. Dados Pessoais e Profissionais
+                    </div>
+                    <div class="form-grid form-grid-2">
+                        <div class="input-wrapper col-span-2">
+                            <label>Nome Completo <span>*</span></label>
+                            <input type="text" class="form-control" id="nome" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Profissão <span>*</span></label>
+                            <input type="text" class="form-control" id="profissao" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Registro Conselho (CRM/CRP) <span>*</span></label>
+                            <input type="text" class="form-control" id="registro">
+                        </div>
+                        <div class="input-wrapper">
+                            <label>CPF <span>*</span></label>
+                            <input type="text" class="form-control" id="cpf" required>
+                        </div>
+                    </div>
+
+                    <!-- 2. Contatos -->
+                    <div class="section-header">
+                        <i data-lucide="phone"></i> 2. Contatos <span>*</span>
+                    </div>
+                    <div class="form-grid form-grid-3">
+                        <div class="input-wrapper">
+                            <label>Celular (Pessoal)</label>
+                            <input type="tel" class="form-control" id="tel_pessoal" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Consultório / Outro</label>
+                            <input type="tel" class="form-control" id="tel_outro">
+                        </div>
+                        <div class="input-wrapper">
+                            <label>E-mail</label>
+                            <input type="text" class="form-control" id="email" required>
+                        </div>
+                    </div>
+
+                    <!-- 3. Endereço -->
+                    <div class="section-header">
+                        <i data-lucide="map-pin"></i> 3. Endereço
+                    </div>
+                    <div class="form-grid form-grid-4">
+                        <div class="input-wrapper">
+                            <label>CEP <span>*</span></label>
+                            <input type="text" class="form-control" id="cep" required>
+                        </div>
+                        <div class="input-wrapper col-span-3">
+                            <label>Logradouro</label>
+                            <input type="text" class="form-control" id="logradouro" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Número </label>
+                            <input type="text" class="form-control" id="numero" required>
+                        </div>
+                        <div class="input-wrapper col-span-2">
+                            <label>Bairro <span>*</span></label>
+                            <input type="text" class="form-control" id="bairro" required>
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Cidade <span>*</span></label>
+                            <input type="text" class="form-control" id="cidade" required>
+                        </div>
+                    </div>
+
+                    <!-- 4. Disponibilidade -->
+                    <div class="section-header">
+                        <i data-lucide="calendar-clock"></i> 4. Disponibilidade <span>*</span>
+                    </div>
+                    <div class="form-grid form-grid-2">
+                        <div class="input-wrapper">
+                            <label>Horas Semanais</label>
+                            <input type="number" class="form-control" id="horas_semanais">
+                        </div>
+                        <div class="input-wrapper">
+                            <label>Selecione o dia</label>
+                            <div style="display: flex; gap: 5px;">
+                                <select class="form-control" id="dia_semana" style="flex:1;">
+                                    <option value="null">Selecione o dia</option>
+                                    <option value="SEGUNDA">Segunda-feira</option>
+                                    <option value="TERCA">Terça-feira</option>
+                                    <option value="QUARTA">Quarta-feira</option>
+                                    <option value="QUINTA">Quinta-feira</option>
+                                    <option value="SEXTA">Sexta-feira</option>
+                                </select>
+                                <input type="time" id= "horario" class="form-control" style="width: 100px;">
+                                <button type="button" id="btn-novo" class="btn-modal" style="background-color: var(--cor4); color: white; padding: 0.5rem 1rem;">
+                                    Adicionar
+                                </button>
+                            </div>
+                             <ul id="listaDisponibilidades" style="list-style: none; padding: 0; margin-top: 1rem;"></ul>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-modal btn-cancel" id="btnCancel">Cancelar</button>
+                <button class="btn-modal btn-save" onclick="saveData()">
+                    <i data-lucide="check"></i> Atualizar Cadastro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const API_BASE = 'http://localhost:8080';
+        const modal = document.getElementById('modalNovoAcesso');
+        let voluntarioIdEmEdicao = null;
+        let disponibilidadesData = [];
+
+        // =============================================
+        // CARREGAR TABELA via GET /voluntarios
+        // =============================================
+        async function carregarVoluntarios() {
+            try {
+                const response = await fetch(`${API_BASE}/voluntarios?size=100`);
+                if (!response.ok) throw new Error(`Erro ${response.status}`);
+                const data = await response.json();
+                const voluntarios = data.content || [];
+                renderizarTabela(voluntarios);
+            } catch (err) {
+                console.error('Erro ao carregar voluntários:', err);
+                alert('Não foi possível carregar os voluntários. Verifique se o backend está rodando.');
+            }
+        }
+
+        function renderizarTabela(voluntarios) {
+            const tbody = document.querySelector('#accessTable tbody');
+            tbody.innerHTML = '';
+
+            if (voluntarios.length === 0) {
+                document.getElementById('emptyState').style.display = 'flex';
+                document.getElementById('tableContainer').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('tableContainer').style.display = '';
+
+            voluntarios.forEach(v => {
+                const emailContato = v.contatos?.find(c => c.tipo === 'EMAIL')?.contato || '—';
+                const statusLabel = { ATIVO: 'Ativo', DESATIVADO: 'Desativado', PENDENTE: 'Pendente' }[v.status] || v.status;
+                const statusClass = { ATIVO: '', DESATIVADO: 'inactive', PENDENTE: 'pending' }[v.status] || '';
+                const statusData  = { ATIVO: 'ativo', DESATIVADO: 'desativado', PENDENTE: 'pendente' }[v.status] || '';
+
+                const tr = document.createElement('tr');
+                tr.className = 'data-row';
+                tr.innerHTML = `
+                    <td class="col-email">${emailContato}</td>
+                    <td class="col-nome">${v.nome}</td>
+                    <td class="center-text col-perfil">Voluntário</td>
+                    <td class="center-text" data-status="${statusData}">
+                        <span class="badge-status ${statusClass}">${statusLabel}</span>
+                    </td>
+                    <td class="center-text">
+                        <button class="btn-action btn-edit" onclick="openEditModal(this)" data-id="${v.id}">
+                            <i data-lucide="pencil" size="16"></i>
+                        </button>
+                        <button class="btn-action btn-delete" onclick="deletarVoluntario(${v.id})">
+                            <i data-lucide="trash-2" size="16"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+            aplicarFiltros();
+        }
+
+        // =============================================
+        // ABRIR MODAL NOVO
+        // =============================================
+        function openNewModal() {
+            voluntarioIdEmEdicao = null;
+            disponibilidadesData = [];
+            document.getElementById('formVoluntario').reset();
+            document.getElementById('listaDisponibilidades').innerHTML = '';
+            document.getElementById('modalTitle').innerHTML = '<i data-lucide="user-plus"></i> Novo Voluntário';
+            document.querySelector('.btn-save').innerHTML = '<i data-lucide="check"></i> Salvar Cadastro';
+            modal.classList.add('show');
+            lucide.createIcons();
+        }
+
+        // =============================================
+        // ABRIR MODAL EDITAR via GET /voluntarios/{id}
+        // =============================================
+        async function openEditModal(btn) {
+            const id = btn.getAttribute('data-id');
+            voluntarioIdEmEdicao = id;
+            disponibilidadesData = [];
+            document.getElementById('listaDisponibilidades').innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_BASE}/voluntarios/${id}`);
+                if (!response.ok) throw new Error(`Erro ${response.status}`);
+                const v = await response.json();
+
+                // Dados pessoais
+                document.getElementById('nome').value = v.nome || '';
+                document.getElementById('profissao').value = v.profissao || '';
+                document.getElementById('registro').value = v.registroConselho || '';
+                document.getElementById('cpf').value = v.cpf || '';
+                document.getElementById('horas_semanais').value = v.horasSemanaisDisponiveis || '';
+
+                // Contatos
+                const telPessoal = v.contatos?.find(c => c.tipo === 'TELEFONE');
+                const emailC     = v.contatos?.find(c => c.tipo === 'EMAIL');
+                const outro      = v.contatos?.find(c => c.tipo === 'OUTRO');
+                document.getElementById('tel_pessoal').value  = telPessoal?.contato || '';
+                document.getElementById('tel_outro').value    = outro?.contato || '';
+                document.getElementById('email').value        = emailC?.contato || '';
+
+                // Endereço
+                const end = v.enderecos?.[0];
+                if (end) {
+                    document.getElementById('cep').value       = end.cep || '';
+                    document.getElementById('logradouro').value = end.logradouro || '';
+                    document.getElementById('numero').value    = end.numero || '';
+                    document.getElementById('bairro').value    = end.bairro || '';
+                    document.getElementById('cidade').value    = end.cidade || '';
+                }
+
+                // Disponibilidades
+                const diasTexto = { SEGUNDA: 'Segunda-feira', TERCA: 'Terça-feira', QUARTA: 'Quarta-feira', QUINTA: 'Quinta-feira', SEXTA: 'Sexta-feira' };
+                (v.disponibilidades || []).forEach(d => {
+                    disponibilidadesData.push({ diaSemana: d.diaSemana, horario: d.horario });
+                    const lista = document.getElementById('listaDisponibilidades');
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <span>✅ ${diasTexto[d.diaSemana] || d.diaSemana}: ${d.horario}</span>
+                        <button type="button" onclick="removeDisponibilidade(this, '${d.diaSemana}', '${d.horario}')"
+                            style="margin-left:10px;background:none;border:none;color:#e74c3c;cursor:pointer;">(Remover)</button>
+                    `;
+                    lista.appendChild(li);
+                });
+
+                document.getElementById('modalTitle').innerHTML = '<i data-lucide="pencil"></i> Editar Voluntário';
+                document.querySelector('.btn-save').innerHTML = '<i data-lucide="check"></i> Atualizar Cadastro';
+                modal.classList.add('show');
+                lucide.createIcons();
+
+            } catch (err) {
+                console.error('Erro ao buscar voluntário:', err);
+                alert('Não foi possível carregar os dados do voluntário.');
+            }
+        }
+
+        // =============================================
+        // SALVAR (POST ou PUT)
+        // =============================================
+        async function saveData() {
+            const contatos = [];
+            const telPessoal = document.getElementById('tel_pessoal').value.trim();
+            if (telPessoal) contatos.push({ tipo: 'TELEFONE', contato: telPessoal, descricao: null });
+
+            const email = document.getElementById('email').value.trim();
+            if (email) contatos.push({ tipo: 'EMAIL', contato: email, descricao: null });
+
+            const telOutro = document.getElementById('tel_outro').value.trim();
+            if (telOutro) contatos.push({ tipo: 'OUTRO', contato: telOutro, descricao: null });
+
+            const enderecos = [{
+                cep:        document.getElementById('cep').value.trim(),
+                logradouro: document.getElementById('logradouro').value.trim(),
+                numero:     document.getElementById('numero').value.trim(),
+                bairro:     document.getElementById('bairro').value.trim(),
+                cidade:     document.getElementById('cidade').value.trim(),
+                complemento: null,
+                estado:     null
+            }];
+
+            const payload = {
+                nome:                     document.getElementById('nome').value.trim(),
+                cpf:                      document.getElementById('cpf').value.trim(),
+                profissao:                document.getElementById('profissao').value.trim(),
+                registroConselho:         document.getElementById('registro').value.trim() || null,
+                horasSemanaisDisponiveis: parseInt(document.getElementById('horas_semanais').value) || null,
+                status:                   voluntarioIdEmEdicao ? undefined : 'PENDENTE',
+                areasAtuacaoIds:          [],
+                contatos:                 contatos,
+                enderecos:                enderecos,
+                disponibilidades:         disponibilidadesData
+            };
+
+            const isEdicao = !!voluntarioIdEmEdicao;
+            const url    = isEdicao ? `${API_BASE}/voluntarios/${voluntarioIdEmEdicao}` : `${API_BASE}/voluntarios`;
+            const method = isEdicao ? 'PUT' : 'POST';
+
+            const btnSave = document.querySelector('.btn-save');
+            btnSave.disabled = true;
+            btnSave.textContent = 'Salvando...';
+
+            try {
+                const response = await fetch(url, {
+                    method,
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    alert(isEdicao ? 'Voluntário atualizado com sucesso!' : 'Voluntário cadastrado com sucesso!');
+                    modal.classList.remove('show');
+                    await carregarVoluntarios();
+                } else {
+                    const erro = await response.json().catch(() => null);
+                    const mensagem = erro?.message || `Erro ${response.status}.`;
+                    alert(`Erro ao salvar: ${mensagem}`);
+                }
+            } catch (err) {
+                alert('Não foi possível conectar ao servidor.');
+                console.error(err);
+            } finally {
+                btnSave.disabled = false;
+                btnSave.innerHTML = '<i data-lucide="check"></i> ' + (isEdicao ? 'Atualizar Cadastro' : 'Salvar Cadastro');
+                lucide.createIcons();
+            }
+        }
+
+        // =============================================
+        // DELETAR via DELETE /voluntarios/{id}
+        // =============================================
+        async function deletarVoluntario(id) {
+            if (!confirm('Tem certeza que deseja excluir este voluntário? Esta ação não pode ser desfeita.')) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/voluntarios/${id}`, { method: 'DELETE' });
+                if (response.ok || response.status === 204) {
+                    await carregarVoluntarios();
+                } else {
+                    alert(`Erro ao excluir: ${response.status}`);
+                }
+            } catch (err) {
+                alert('Não foi possível conectar ao servidor.');
+                console.error(err);
+            }
+        }
+
+        // =============================================
+        // DISPONIBILIDADES no modal
+        // =============================================
+        document.getElementById('btn-novo').addEventListener('click', () => {
+            const diaSemanaSelect = document.getElementById('dia_semana');
+            const horarioInput = document.getElementById('horario');
+
+            const diaSemanaTexto = diaSemanaSelect.options[diaSemanaSelect.selectedIndex].text;
+            const diaSemanaValor = diaSemanaSelect.value;
+            const horario = horarioInput.value;
+
+            if (diaSemanaValor !== "null" && diaSemanaValor !== "" && horario) {
+                disponibilidadesData.push({ diaSemana: diaSemanaValor, horario: horario });
+
+                const lista = document.getElementById('listaDisponibilidades');
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <span>✅ ${diaSemanaTexto}: ${horario}</span>
+                    <button type="button" onclick="removeDisponibilidade(this, '${diaSemanaValor}', '${horario}')"
+                        style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">
+                        (Remover)
+                    </button>
+                `;
+                lista.appendChild(listItem);
+                diaSemanaSelect.value = 'null';
+                horarioInput.value = '';
+            } else {
+                alert('Por favor, selecione um dia e um horário.');
+            }
+        });
+
+        function removeDisponibilidade(button, diaValor, horario) {
+            const index = disponibilidadesData.findIndex(d => d.diaSemana === diaValor && d.horario === horario);
+            if (index > -1) disponibilidadesData.splice(index, 1);
+            button.closest('li').remove();
+        }
+
+        // =============================================
+        // FECHAR MODAL
+        // =============================================
+        document.getElementById('btnCloseX').onclick = () => modal.classList.remove('show');
+        document.getElementById('btnCancel').onclick  = () => modal.classList.remove('show');
+
+        // =============================================
+        // FILTROS
+        // =============================================
+        let filtroStatusAtual = 'todos';
+
+        function filterTable() { aplicarFiltros(); }
+
+        function setStatusFilter(status, el) {
+            document.querySelectorAll('.status-option').forEach(e => e.classList.remove('active'));
+            el.classList.add('active');
+            filtroStatusAtual = status;
+            aplicarFiltros();
+        }
+
+        function aplicarFiltros() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const rows = document.querySelectorAll('.data-row');
+            let hasVisibleRows = false;
+
+            rows.forEach(row => {
+                const matchesText = row.innerText.toLowerCase().includes(input);
+                const tdStatus = row.querySelector('[data-status]');
+                const statusDaLinha = tdStatus ? tdStatus.getAttribute('data-status') : '';
+
+                let matchesStatus = false;
+                if (filtroStatusAtual === 'todos') {
+                    matchesStatus = true;
+                } else if (filtroStatusAtual === 'ativos' && statusDaLinha === 'ativo') {
+                    matchesStatus = true;
+                } else if (filtroStatusAtual === 'desativados' && statusDaLinha === 'desativado') {
+                    matchesStatus = true;
+                } else if (filtroStatusAtual === 'pendentes' && statusDaLinha === 'pendente') {
+                    matchesStatus = true;
+                }
+
+                if (matchesText && matchesStatus) {
+                    row.classList.remove('hidden');
+                    row.style.display = '';
+                    hasVisibleRows = true;
+                } else {
+                    row.classList.add('hidden');
+                    row.style.display = 'none';
+                }
+            });
+
+            document.getElementById('emptyState').style.display = hasVisibleRows ? 'none' : 'flex';
+        }
+
+        // =============================================
+        // INICIALIZAÇÃO
+        // =============================================
+        carregarVoluntarios();
+    </script>
+</body>
+</html>
