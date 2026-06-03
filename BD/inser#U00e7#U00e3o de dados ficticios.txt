@@ -1,0 +1,134 @@
+
+INSERT INTO area_atuacao (nome_area) VALUES
+    ('Psicologia'),
+    ('Odontologia'),
+    ('Psicopedagogia'),
+    ('Neuropsicopedagogia'),
+    ('Educação Física'),
+    ('Fisioterapia'),
+    ('Medicina - Pneumologia'),
+    ('Nutrição'),
+    ('Assistência Social'),
+    ('Fonoaudiologia'),
+    ('Outras / Apoio')
+ON CONFLICT (nome_area) DO NOTHING;
+
+-- ***************************************
+-- USUÁRIOS
+-- ***************************************
+INSERT INTO usuario (nome, email, senha_hash, perfil, ativo) VALUES
+    ('Administrador',       'admin@gaa.org.br',      '$2a$12$xRqDvKzN3Gh6fJmB8LpOsON0K5v4Gp3B2mT7wY1eA9jRdCfKiHuXy', 'admin',     TRUE),
+    ('Maria Recepção',      'recepcao@gaa.org.br',   '$2a$12$aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789abcdefABCDEFGHIJKL', 'recepcao',  TRUE),
+    ('Ana Paula Souza',     'ana.souza@gaa.org.br',  '$2a$12$ZyXwVuTsRqPoNmLkJiHgFeDcBa9876543210zyxwvutsrqponmlkji', 'voluntario',TRUE),
+    ('Carlos Eduardo Lima', 'carlos.lima@gaa.org.br','$2a$12$1234567890abcdefABCDEFzyxwvutsrqponmlkjihgfedcbaZYXWVU', 'voluntario',TRUE),
+    ('Fernanda Rocha',      'fernanda.rocha@gaa.org.br','$2a$12$ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01','voluntario',TRUE),
+    ('Roberto Meirelles',   'roberto.m@gaa.org.br',  '$2a$12$mnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcd', 'voluntario',TRUE),
+    ('Juliana Castro',      'juliana.castro@gaa.org.br','$2a$12$QRSTUVWXYZabcdefghijklmnop0123456789ABCDEFGHIJKLMNOpqrs','voluntario',FALSE),
+    ('Patrícia Nunes',      'patricia.nunes@gaa.org.br','$2a$12$stuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghij','voluntario',TRUE);
+
+-- ***************************************
+-- VOLUNTÁRIOS
+-- ***************************************
+INSERT INTO voluntario
+    (id_usuario, nome, profissao, rg, cpf,
+     registro_conselho, horas_semanais_disponiveis, ativo)
+VALUES
+    (3, 'Ana Paula Souza',     'Psicóloga',         '12.345.678-9', '12345678901',
+        'CRP-06/123456',  8, TRUE),
+    (4, 'Carlos Eduardo Lima', 'Dentista',          '98.765.432-1', '98765432100',
+        'CRO-SP/45678',  10, TRUE),
+    (5, 'Fernanda Rocha',      'Nutricionista',     '55.444.333-2', '55444333201',
+        'CFN-12345',      6, TRUE),
+    (6, 'Roberto Meirelles',   'Fisioterapeuta',    '33.222.111-0', '33222111001',
+        'CREFITO-3/78910',12, TRUE),
+    (7, 'Juliana Castro',      'Fonoaudióloga',     '77.888.999-5', '77888999501',
+        'CFFa-SP/3456',   4, FALSE),
+    (8, 'Patrícia Nunes',      'Assistente Social', '44.555.666-7', '44555666701',
+        'CRESS-SP/22345', 8, TRUE),
+    -- voluntários sem usuário vinculado
+    (NULL, 'Marcelo Tavares',  'Professor Ed. Física','11.999.888-3','11999888302',
+        NULL,             6, TRUE),
+    (NULL, 'Sílvia Monteiro',  'Médica Pneumologista','66.777.555-4','66777555401',
+        'CRM-SP/98765',   4, TRUE);
+
+-- ***************************************
+-- ENDEREÇOS
+-- ***************************************
+INSERT INTO endereco
+    (id_voluntario, cep, logradouro, numero, complemento, bairro, cidade, estado)
+VALUES
+    (1, '14020010', 'Rua Quintino Bocaiuva',  '123', 'Apto 5',   'Centro',         'Ribeirão Preto', 'SP'),
+    (2, '14025080', 'Avenida Costábile Romano','456', NULL,       'Ribeirânia',     'Ribeirão Preto', 'SP'),
+    (3, '14050210', 'Rua Mariana Junqueira',  '789', 'Casa 2',   'Jardim Paulista', 'Ribeirão Preto', 'SP'),
+    (4, '14091000', 'Rua Sete de Setembro',   '321', NULL,       'Nova Ribeirânia', 'Ribeirão Preto', 'SP'),
+    (5, '14040040', 'Avenida Presidente Vargas','654','Bloco B',  'Campos Elíseos', 'Ribeirão Preto', 'SP'),
+    (6, '14055010', 'Rua Visconde de Inhaúma', '987', NULL,      'Sumaré',         'Ribeirão Preto', 'SP'),
+    (7, '14075020', 'Rua Major Nicácio',       '111', 'Sala 12', 'São José',       'Ribeirão Preto', 'SP'),
+    (8, '14032060', 'Rua Tibiriçá',            '222', NULL,      'Centro',         'Ribeirão Preto', 'SP');
+
+-- ***************************************
+-- TELEFONES
+-- ***************************************
+INSERT INTO telefone_voluntario
+    (id_voluntario, telefone_pessoal, telefone_residencial, telefone_consultorio)
+VALUES
+    (1, '16991110001', '1633310001', '1632110001'),
+    (2, '16992220002', NULL,         '1632220002'),
+    (3, '16993330003', '1633330003', NULL        ),
+    (4, '16994440004', NULL,         '1632440004'),
+    (5, '16995550005', '1633550005', NULL        ),
+    (6, '16996660006', NULL,         '1632660006'),
+    (7, '16997770007', '1633770007', '1632770007'),
+    (8, '16998880008', NULL,         NULL        );
+
+-- ***************************************
+-- DISPONIBILIDADES
+-- ***************************************
+INSERT INTO disponibilidade (id_voluntario, dia_semana, horario) VALUES
+    -- Ana Paula (Psicóloga)
+    (1, 'Segunda-feira',  '08:00'),
+    (1, 'Quarta-feira',   '13:00'),
+    -- Carlos (Dentista)
+    (2, 'Terça-feira',    '09:00'),
+    (2, 'Quinta-feira',   '14:00'),
+    -- Fernanda (Nutricionista)
+    (3, 'Segunda-feira',  '14:00'),
+    (3, 'Sexta-feira',    '08:00'),
+    -- Roberto (Fisioterapeuta)
+    (4, 'Quarta-feira',   '07:00'),
+    (4, 'Quinta-feira',   '07:00'),
+    (4, 'Sexta-feira',    '07:00'),
+    -- Juliana (Fonoaudióloga) — inativa mas com disponibilidade histórica
+    (5, 'Terça-feira',    '15:00'),
+    -- Patrícia (Assistente Social)
+    (6, 'Segunda-feira',  '09:00'),
+    (6, 'Quarta-feira',   '09:00'),
+    -- Marcelo (Prof. Ed. Física)
+    (7, 'Sábado',         '08:00'),
+    (7, 'Sábado',         '10:00'),
+    -- Sílvia (Médica)
+    (8, 'Sexta-feira',    '13:00');
+
+-- ***************************************
+-- RELACIONAMENTO VOLUNTÁRIO ↔️ ÁREA
+-- ***************************************
+INSERT INTO voluntario_area (id_voluntario, id_area) VALUES
+    -- Ana Paula → Psicologia
+    (1, 1),
+    -- Carlos → Odontologia
+    (2, 2),
+    -- Fernanda → Nutrição
+    (3, 8),
+    -- Roberto → Fisioterapia
+    (4, 6),
+    -- Juliana → Fonoaudiologia
+    (5, 10),
+    -- Patrícia → Assistência Social
+    (6, 9),
+    -- Marcelo → Educação Física
+    (7, 5),
+    -- Sílvia → Medicina - Pneumologia + Outras / Apoio
+    (8, 7),
+    (8, 11),
+    -- Ana Paula também faz Psicopedagogia
+    (1, 3);

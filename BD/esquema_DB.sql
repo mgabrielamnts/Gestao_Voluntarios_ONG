@@ -1,0 +1,209 @@
+-- *************************************************************
+-- DELETANDO TODAS AS TABELAS
+-- *************************************************************
+DROP TABLE IF EXISTS voluntario_area     CASCADE;
+DROP TABLE IF EXISTS disponibilidade      CASCADE;
+DROP TABLE IF EXISTS telefone_voluntario  CASCADE;
+DROP TABLE IF EXISTS endereco              CASCADE;
+DROP TABLE IF EXISTS voluntario           CASCADE;
+DROP TABLE IF EXISTS voluntarios           CASCADE;
+DROP TABLE IF EXISTS area_atuacao          CASCADE;
+DROP TABLE IF EXISTS usuario               CASCADE;
+
+-- *************************************************************
+
+-- RECRIANDO AS TABELAS
+
+-- *************************************************************
+
+
+
+CREATE TABLE usuario (
+
+    id_usuario    SERIAL       PRIMARY KEY,
+
+    nome          VARCHAR(150) NOT NULL,
+
+    email         VARCHAR(150) NOT NULL UNIQUE,
+
+    senha_hash    VARCHAR(255) NOT NULL,
+
+    perfil        VARCHAR(20)  NOT NULL DEFAULT 'admin'
+
+                               CHECK (perfil IN ('admin', 'recepcao', 'voluntario')),
+
+    ativo         BOOLEAN      NOT NULL DEFAULT TRUE,
+
+    criado_em     TIMESTAMP    NOT NULL DEFAULT NOW()
+
+);
+
+
+
+CREATE TABLE area_atuacao (
+
+    id_area   SERIAL       PRIMARY KEY,
+
+    nome_area VARCHAR(100) NOT NULL UNIQUE
+
+);
+
+
+
+CREATE TABLE voluntario (
+
+    id_voluntario           SERIAL       PRIMARY KEY,
+
+    id_usuario              INTEGER      REFERENCES usuario(id_usuario) ON DELETE SET NULL,
+
+    nome                    VARCHAR(150) NOT NULL,
+
+    profissao               VARCHAR(100) NOT NULL,
+
+    rg                      VARCHAR(20)  NOT NULL,
+
+    cpf                     VARCHAR(11)  NOT NULL UNIQUE,
+
+    registro_conselho       VARCHAR(50),
+
+    horas_semanais_disponiveis INTEGER   CHECK (horas_semanais_disponiveis > 0),
+
+    data_cadastro           DATE         NOT NULL DEFAULT CURRENT_DATE,
+
+    ativo                   BOOLEAN      NOT NULL DEFAULT TRUE
+
+);
+
+
+
+CREATE TABLE endereco (
+
+    id_endereco   SERIAL       PRIMARY KEY,
+
+    id_voluntario INTEGER      NOT NULL REFERENCES voluntario(id_voluntario) ON DELETE CASCADE,
+
+    cep           VARCHAR(8)   NOT NULL,
+
+    logradouro    VARCHAR(200) NOT NULL,
+
+    numero        VARCHAR(10)  NOT NULL,
+
+    complemento   VARCHAR(100),
+
+    bairro        VARCHAR(100) NOT NULL,
+
+    cidade        VARCHAR(100) NOT NULL,
+
+    estado        VARCHAR(2)   NOT NULL
+
+);
+
+
+
+CREATE TABLE telefone_voluntario (
+
+    id_telefone_voluntario SERIAL  PRIMARY KEY,
+
+    id_voluntario          INTEGER NOT NULL REFERENCES voluntario(id_voluntario) ON DELETE CASCADE,
+
+    telefone_pessoal       VARCHAR(15),
+
+    telefone_residencial   VARCHAR(15),
+
+    telefone_consultorio   VARCHAR(15)
+
+);
+
+
+
+CREATE TABLE disponibilidade (
+
+    id_disponibilidade SERIAL      PRIMARY KEY,
+
+    id_voluntario      INTEGER     NOT NULL REFERENCES voluntario(id_voluntario) ON DELETE CASCADE,
+
+    dia_semana         VARCHAR(20) NOT NULL,
+
+    horario            TIME        NOT NULL
+
+);
+
+
+
+CREATE TABLE voluntario_area (
+
+    id_voluntario INTEGER NOT NULL REFERENCES voluntario(id_voluntario) ON DELETE CASCADE,
+
+    id_area       INTEGER NOT NULL REFERENCES area_atuacao(id_area)     ON DELETE RESTRICT,
+
+    PRIMARY KEY (id_voluntario, id_area)
+
+);
+
+
+
+-- *************************************************************
+
+-- ÍNDICES
+
+-- *************************************************************
+
+CREATE INDEX idx_voluntario_cpf      ON voluntario(cpf);
+
+CREATE INDEX idx_voluntario_ativo    ON voluntario(ativo);
+
+CREATE INDEX idx_disponibilidade_vol ON disponibilidade(id_voluntario);
+
+CREATE INDEX idx_voluntario_area_vol ON voluntario_area(id_voluntario);
+
+CREATE INDEX idx_usuario_email       ON usuario(email);
+
+
+
+-- *************************************************************
+
+-- DADOS INICIAIS
+
+-- *************************************************************
+
+
+
+INSERT INTO area_atuacao (nome_area) VALUES
+
+    ('Psicologia'),
+
+    ('Odontologia'),
+
+    ('Psicopedagogia'),
+
+    ('Neuropsicopedagogia'),
+
+    ('Educação Física'),
+
+    ('Fisioterapia'),
+
+    ('Medicina - Pneumologia'),
+
+    ('Nutrição'),
+
+    ('Assistência Social'),
+
+    ('Fonoaudiologia'),
+
+    ('Outras / Apoio');
+
+
+
+INSERT INTO usuario (nome, email, senha_hash, perfil)
+
+VALUES (
+
+    'Administrador',
+
+    'admin@gaa.org.br',
+
+    '$2a$12$xRqDvKzN3Gh6fJmB8LpOsON0K5v4Gp3B2mT7wY1eA9jRdCfKiHuXy',
+
+    'admin'
+
+);
