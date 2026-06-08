@@ -193,8 +193,34 @@
                 </button>
             </div>
         </div>
+        
     </div>
-
+    <div class="modal-overlay" id="modalStatus">
+        <div class="modal-content modal-status-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i data-lucide="shield-alert"></i> Alterar Status
+                </div>
+                <button class="btn-close" id="btnCloseStatusX"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: #4b5563;">
+                    Selecione o novo status para: <br><strong id="statusModalNome" style="color: #1f2937;"></strong>
+                </p>
+                <div class="status-options-vertical">
+                    <button class="btn-status-select" onclick="updateVolunteerStatus('ativo')">
+                        <span class="badge-status">Ativo</span>
+                    </button>
+                    <button class="btn-status-select" onclick="updateVolunteerStatus('pendente')">
+                        <span class="badge-status pending">Pendente</span>
+                    </button>
+                    <button class="btn-status-select" onclick="updateVolunteerStatus('desativado')">
+                        <span class="badge-status inactive">Desativado</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         lucide.createIcons();
 
