@@ -2,6 +2,7 @@ package com.gaa.backend.controller;
 
 import com.gaa.backend.dto.VoluntarioRequestDTO;
 import com.gaa.backend.dto.VoluntarioResponseDTO;
+import com.gaa.backend.enums.StatusVoluntario;
 import com.gaa.backend.mapper.VoluntarioMapper;
 import com.gaa.backend.model.Voluntario;
 import com.gaa.backend.service.VoluntarioService;
@@ -51,6 +52,15 @@ public class VoluntarioController {
             @RequestBody VoluntarioRequestDTO dto
     ) {
         Voluntario atualizado = voluntarioService.atualizar(id, dto);
+        return VoluntarioMapper.toDTO(atualizado);
+    }
+
+    @PatchMapping("/{id}/status")
+    public VoluntarioResponseDTO atualizarStatus(
+            @PathVariable Long id,
+            @RequestParam StatusVoluntario status
+    ) {
+        Voluntario atualizado = voluntarioService.atualizarStatus(id, status);
         return VoluntarioMapper.toDTO(atualizado);
     }
 
