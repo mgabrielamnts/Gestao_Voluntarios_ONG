@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Voluntário</title>
+    <link rel="stylesheet" href="styleCADAS.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="../Imagens/icone_logo.png" type="image/x-icon">
+</head>
+<body>
+  <div class="container-principal">
+      <h1 class="header-title">Registro de Voluntário</h1>
+      <p class="subtitle">
+          Preencha todos os campos obrigatórios (*) para completar seu cadastro no Grupo Amparo e Alívio.
+      </p>
+
+      <form id="voluntarioForm">
+          <!-- SEÇÃO 1: DADOS PESSOAIS -->
+          <div class="section">
+              <h2>1. Dados Pessoais e Profissionais</h2>
+              <div class="input-group">
+                  <div class="form-group col-span-full">
+                      <label for="nome">Nome Completo *</label>
+                      <input type="text" maxlength="255" id="nome" name="nome" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label for="profissao">Profissão *</label>
+                      <input type="text" id="profissao" name="profissao" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label for="registro_conselho">Registro no Conselho (CRM, CRP etc.) *</label>
+                      <input type="text" maxlength="50" id="registro_conselho" name="registro_conselho" class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label for="cpf">CPF *</label>
+                      <input type="text" maxlength="11" id="cpf" name="cpf" required class="form-control">
+                  </div>
+              </div>
+          </div>
+
+          <!-- SEÇÃO 2: CONTATOS -->
+          <div class="section">
+              <h2>2. Contatos</h2>  
+              <div class="input-group input-group-contact">
+                  <div class="form-group">
+                      <label for="telefone_pessoal">Telefone Pessoal (Celular) *</label>
+                      <input type="tel" maxlength="11" placeholder="Digite apenas os números" id="telefone_pessoal" name="telefone_pessoal" required class="form-control">
+
+                      <label for="email">E-mail *</label>
+                      <input type="email" maxlength="50" id="email" name="email" required class="form-control">
+                      
+                      <label for="contato_outro">Outro</label>
+                      <input type="tel" inputmode="numeric" pattern="[0-9]" maxlength="11" placeholder="Digite apenas os números" id="contato_outro" name="contato_outro" class="form-control">
+                  </div>
+                  <div class="form-group" style="margin-left: 3rem;">
+                    <label for="telefone_pessoal">Desc. do telefone pessoal</label>
+                    <input type="text" id="telefone_pessoal_descricao" name="telefone_pessoal_descricao" class="form-control" style="width: 200%";>
+
+                    <label for="telefone_outro_descricao">Desc. do outro telefone</label>
+                    <input type="text" id="telefone_outro_descricao" name="telefone_outro_descricao" class="form-control" style="width: 200%";>
+
+                    <label for="contato_outro_descricao">Desc. do outro contato</label>
+                    <input type="text" id="contato_outro_descricao" name="contato_outro_descricao" class="form-control" style="width: 200%";>
+                  </div>
+              </div>
+          </div>
+
+          <!-- SEÇÃO 3: ENDEREÇO -->
+          <div class="section">
+              <h2>3. Endereço</h2>
+              <div class="input-group input-group-address">
+                  <div class="form-group">
+                      <label for="cep">CEP *</label>
+                      <input type="text" id="cep" name="cep" required class="form-control" maxlength="9">
+                  </div>
+                  <div class="form-group col-span-full col-span-3-md">
+                      <label for="logradouro">Logradouro </label>
+                      <input type="text" id="logradouro" name="logradouro" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label for="numero">Número </label>
+                      <input type="text" maxlength="10" id="numero" name="numero" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label for="complemento">Complemento</label>
+                      <input type="text" id="complemento" name="complemento" class="form-control">
+                  </div>
+                  <div class="form-group col-span-full col-span-2-md">
+                      <label for="bairro">Bairro *</label>
+                      <input type="text" id="bairro" name="bairro" required class="form-control">
+                  </div>
+                  <div class="form-group">
+                      <label for="cidade">Cidade *</label>
+                      <input type="text" id="cidade" name="cidade" required class="form-control">
+                  </div>
+              </div>
+          </div>
+
+          <!-- SEÇÃO 4: DISPONIBILIDADE -->
+          <div class="section">
+              <h2>4. Compromisso e Disponibilidade</h2>
+
+              <div class="form-group" style="margin-bottom: 1.5rem;">
+                  <label for="horas_semanais_disponiveis">Horas Semanais Disponíveis (Estimativa)</label>
+                  <input type="number" id="horas_semanais_disponiveis" name="horas_semanais_disponiveis"
+                         min="1" max="168" class="form-control col-span-1-half-md">
+              </div>
+
+              <div style="margin-bottom: 2rem;">
+                  <label class="block-label" style="margin-bottom: 0.5rem;">Áreas de Atuação *</label>
+                  <div class="checkbox-container" id="areas_atuacao">
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="1"><span>Psicologia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="2"><span>Odontologia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="3"><span>Psicopedagogia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="4"><span>Neuropsicopedagogia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="5"><span>Educação Física</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="6"><span>Fisioterapia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="7"><span>Medicina - Pneumologia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="8"><span>Nutrição</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="9"><span>Assistência Social</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="10"><span>Fonoaudiologia</span></label>
+                      <label class="checkbox-label"><input type="checkbox" name="areas" value="11"><span>Outras / Apoio</span></label>
+                  </div>
+              </div>
+
+              <div>
+                  <label class="block-label" style="margin-bottom: 0.5rem;">Disponibilidade de Horários</label>
+                  <div class="disponibilidade-adder">
+                      <select id="dia_semana" class="form-control" style="flex: 1.5;">
+                          <option value="null">Selecione o dia</option>
+                          <option value="SEGUNDA">Segunda-feira</option>
+                          <option value="TERCA">Terça-feira</option>
+                          <option value="QUARTA">Quarta-feira</option>
+                          <option value="QUINTA">Quinta-feira</option>
+                          <option value="SEXTA">Sexta-feira</option>
+                      </select>
+                      <input type="time" id="horario" class="form-control" style="flex: 1;">
+                      <button type="button" id="btnAddDisponibilidade" class="btn"
+                              style="background-color: var(--cor4); color: white; padding: 0.5rem 1rem;">
+                          Adicionar
+                      </button>
+                  </div>
+                  <ul id="listaDisponibilidades" style="list-style: none; padding: 0; margin-top: 1rem;"></ul>
+              </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Finalizar Cadastro</button>
+      </form>
+  </div>
+
+  <script>
+    const API_BASE = 'http://localhost:8080';
+
+    let disponibilidadesData = [];
+
+    // --- ADICIONAR DISPONIBILIDADE ---
+    document.getElementById('btnAddDisponibilidade').addEventListener('click', () => {
+        const diaSemanaSelect = document.getElementById('dia_semana');
+        const horarioInput = document.getElementById('horario');
+
+        const diaSemanaTexto = diaSemanaSelect.options[diaSemanaSelect.selectedIndex].text;
+        const diaSemana = diaSemanaSelect.value;
+        const horario = horarioInput.value;
+
+        if (diaSemana !== "null" && diaSemana !== "" && horario) {
+            disponibilidadesData.push({ diaSemana: diaSemana, horario: horario });
+
+            const lista = document.getElementById('listaDisponibilidades');
+            const listItem = document.createElement('li');
+            const textoDisplay = `✅ ${diaSemanaTexto}: ${horario}`;
+            listItem.innerHTML = `
+                <span>${textoDisplay}</span>
+                <button type="button" onclick="removeDisponibilidade(this, '${diaSemana}', '${horario}')"
+                    style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">
+                    (Remover)
+                </button>
+            `;
+            lista.appendChild(listItem);
+
+            diaSemanaSelect.value = 'null';
+            horarioInput.value = '';
+        } else {
+            alert('Por favor, selecione um dia e um horário.');
+        }
+    });
+
+    function removeDisponibilidade(button, dia, horario) {
+        const index = disponibilidadesData.findIndex(d => d.diaSemana === dia && d.horario === horario);
+        if (index > -1) disponibilidadesData.splice(index, 1);
+        button.closest('li').remove();
+    }
+
+    // --- SUBMIT: monta payload e envia ao backend ---
+    document.getElementById('voluntarioForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        // Áreas de atuação marcadas
+        const areasSelecionadas = Array.from(
+            document.querySelectorAll('input[name="areas"]:checked')
+        ).map(cb => parseInt(cb.value));
+
+        // Contatos — monta array apenas com os campos preenchidos
+        const contatos = [];
+
+        const telPessoal = document.getElementById('telefone_pessoal').value.trim();
+        if (telPessoal) contatos.push({
+            tipo: 'TELEFONE',
+            contato: telPessoal,
+            descricao: document.getElementById('telefone_pessoal_descricao').value.trim() || null
+        });
+
+        const email = document.getElementById('email').value.trim();
+        if (email) contatos.push({
+            tipo: 'EMAIL',
+            contato: email,
+            descricao: null
+        });
+
+        const contatoOutro = document.getElementById('contato_outro').value.trim();
+        if (contatoOutro) contatos.push({
+            tipo: 'OUTRO',
+            contato: contatoOutro,
+            descricao: document.getElementById('contato_outro_descricao').value.trim() || null
+        });
+
+        // Endereço
+        const enderecos = [{
+            cep:         document.getElementById('cep').value.trim(),
+            logradouro:  document.getElementById('logradouro').value.trim(),
+            numero:      document.getElementById('numero').value.trim(),
+            complemento: document.getElementById('complemento').value.trim() || null,
+            bairro:      document.getElementById('bairro').value.trim(),
+            cidade:      document.getElementById('cidade').value.trim(),
+            estado:      null
+        }];
+
+        // Payload final
+        const payload = {
+            nome:                     document.getElementById('nome').value.trim(),
+            cpf:                      document.getElementById('cpf').value.trim(),
+            profissao:                document.getElementById('profissao').value.trim(),
+            registroConselho:         document.getElementById('registro_conselho').value.trim() || null,
+            horasSemanaisDisponiveis: parseInt(document.getElementById('horas_semanais_disponiveis').value) || null,
+            status:                   'PENDENTE',
+            areasAtuacaoIds:          areasSelecionadas,
+            contatos:                 contatos,
+            enderecos:                enderecos,
+            disponibilidades:         disponibilidadesData
+        };
+
+        const btnSubmit = document.querySelector('button[type="submit"]');
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = 'Enviando...';
+
+        try {
+            const response = await fetch(`${API_BASE}/voluntarios`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                alert('Cadastro realizado com sucesso!');
+                document.getElementById('voluntarioForm').reset();
+                disponibilidadesData = [];
+                document.getElementById('listaDisponibilidades').innerHTML = '';
+            } else {
+                const erro = await response.json().catch(() => null);
+                const mensagem = erro?.message || `Erro ${response.status}. Verifique os dados e tente novamente.`;
+                alert(`Erro ao cadastrar: ${mensagem}`);
+            }
+        } catch (err) {
+            alert('Não foi possível conectar ao servidor. Verifique se o backend está rodando.');
+            console.error(err);
+        } finally {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = 'Finalizar Cadastro';
+        }
+    });
+
+    // --- VALIDAÇÃO DE CAMPOS OBRIGATÓRIOS ---
+    const requiredFields = document.querySelectorAll('[required]');
+    requiredFields.forEach(field => {
+        field.addEventListener('invalid', (e) => {
+            if (e.target.validity.valueMissing) {
+                e.target.setCustomValidity('Por favor, preencha este campo obrigatório.');
+            } else {
+                e.target.setCustomValidity('');
+            }
+        });
+        field.addEventListener('input', (e) => {
+            e.target.setCustomValidity('');
+        });
+    });
+  </script>
+</body>
+</html>
