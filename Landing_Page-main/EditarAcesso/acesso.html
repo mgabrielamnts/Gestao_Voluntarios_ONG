@@ -67,9 +67,8 @@
                         <td class="col-email">Gbarbacena@gmail.com</td>
                         <td class="col-nome">Dr. Genário Claudinei Barbacena</td>
                         <td class="center-text col-perfil">Voluntário</td>
-                        <td class="center-text" data-status="ativo"><span class="badge-status">Ativo</span></td>
+                        <td class="center-text cell-status-clickable" data-status="ativo" onclick="openStatusModal(this)"><span class="badge-status">Ativo</span></td>
                         <td class="center-text">
-                            <!-- Botão de Edição com chamada JS -->
                             <button class="btn-action btn-edit" onclick="openEditModal(this)">
                                 <i data-lucide="pencil" size="16"></i>
                             </button>
@@ -80,7 +79,7 @@
                         <td class="col-email">JoaoSalesSilva@gmail.com</td>
                         <td class="col-nome">Dr. João da Silva Sales</td>
                         <td class="center-text col-perfil">Voluntário</td>
-                        <td class="center-text" data-status="ativo"><span class="badge-status">Ativo</span></td>
+                        <td class="center-text cell-status-clickable" data-status="ativo" onclick="openStatusModal(this)"><span class="badge-status">Ativo</span></td>
                         <td class="center-text">
                             <button class="btn-action btn-edit" onclick="openEditModal(this)">
                                 <i data-lucide="pencil" size="16"></i>
@@ -92,7 +91,7 @@
                         <td class="col-email">AnaSouza@gmail.com</td>
                         <td class="col-nome">Dra. Ana Souza</td>
                         <td class="center-text col-perfil">Voluntário</td>
-                        <td class="center-text" data-status=""><span class="badge-status inactive">desativado</span></td>
+                        <td class="center-text cell-status-clickable" data-status="desativado" onclick="openStatusModal(this)"><span class="badge-status inactive">desativado</span></td>
                         <td class="center-text">
                             <button class="btn-action btn-edit" onclick="openEditModal(this)">
                                 <i data-lucide="pencil" size="16"></i>
@@ -229,80 +228,151 @@
                 </button>
             </div>
         </div>
-    </div>
-
-    <script>
-           lucide.createIcons();
-        const modal = document.getElementById('modalNovoAcesso');
         
+    </div>
+    <div class="modal-overlay" id="modalStatus">
+        <div class="modal-content modal-status-content">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i data-lucide="shield-alert"></i> Alterar Status
+                </div>
+                <button class="btn-close" id="btnCloseStatusX"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 1rem; color: #4b5563;">
+                    Selecione o novo status para: <br><strong id="statusModalNome" style="color: #1f2937;"></strong>
+                </p>
+                <div class="status-options-vertical">
+                    <button class="btn-status-select" onclick="updateVolunteerStatus('ativo')">
+                        <span class="badge-status">Ativo</span>
+                    </button>
+                    <button class="btn-status-select" onclick="updateVolunteerStatus('pendente')">
+                        <span class="badge-status pending">Pendente</span>
+                    </button>
+                    <button class="btn-status-select" onclick="updateVolunteerStatus('desativado')">
+                        <span class="badge-status inactive">Desativado</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        lucide.createIcons();
+
+        const modalAcesso = document.getElementById('modalNovoAcesso');
+        const modalStatus = document.getElementById('modalStatus');
+
+        // 1. ABRIR MODAIS (NOVO E EDITAR)
         function openNewModal() {
             // Limpa o formulário
             document.getElementById('formVoluntario').reset();
             
-            // Configura UI para "Novo"
+            // Configura o título para "Novo"
             document.getElementById('modalTitle').innerHTML = '<i data-lucide="user-plus"></i> Novo Voluntário';
             
-            modal.classList.add('show');
+            // Abre o modal
+            modalAcesso.classList.add('show');
             lucide.createIcons();
         }
 
         function openEditModal(btn) {
+            // Pega a linha da tabela que foi clicada para puxar o nome
             const row = btn.closest('tr');
             const nome = row.querySelector('.col-nome').textContent;
             
-            // Preenche o que é possível com base na tabela
+            // Preenche o nome no formulário
             document.getElementById('nome').value = nome;
-            // Outros campos ficariam vazios ou viriam de uma API real
             
-            // Configura UI para "Editar"
+            // Configura o título para "Editar"
             document.getElementById('modalTitle').innerHTML = '<i data-lucide="pencil"></i> Editar Voluntário';
             
-            modal.classList.add('show');
+            // Abre o modal
+            modalAcesso.classList.add('show');
             lucide.createIcons();
         }
 
         function saveData() {
-            alert('Dados salvos com sucesso!');
-            modal.classList.remove('show');
+            // Simulação de salvamento
+            alert('Ação de atualizar simulada com sucesso!');
+            modalAcesso.classList.remove('show');
         }
 
-        // Fechamento do Modal
-        document.getElementById('btnCloseX').onclick = () => modal.classList.remove('show');
-        document.getElementById('btnCancel').onclick = () => modal.classList.remove('show');
+        // 2. MODAL DE ALTERAR STATUS
+        let currentStatusCell = null; 
 
-        // Lógica de Filtro Combinada (Pesquisa + Status)
-        let filtroStatusAtual = 'todos'; // Variável global para guardar o status atual
+        function openStatusModal(cell) {
+            currentStatusCell = cell;
+            
+            // Pega o nome do voluntário na linha clicada
+            const row = cell.closest('tr');
+            const nome = row.querySelector('.col-nome').textContent;
+            
+            // Atualiza o texto do modal com o nome do voluntário
+            document.getElementById('statusModalNome').textContent = nome;
+            
+            // Abre o modal de status
+            modalStatus.classList.add('show');
+            lucide.createIcons();
+        }
 
-        // Chamada quando o usuário digita na barra de pesquisa
+        function updateVolunteerStatus(newStatus) {
+            if (!currentStatusCell) return;
+            
+            // Atualiza o atributo data-status da célula (importante para a barra de pesquisa funcionar depois)
+            currentStatusCell.setAttribute('data-status', newStatus);
+            
+            const badge = currentStatusCell.querySelector('.badge-status');
+            
+            // Altera o visual do badge com base no status escolhido na tela
+            if (newStatus === 'ativo') {
+                badge.className = 'badge-status';
+                badge.textContent = 'Ativo';
+            } else if (newStatus === 'pendente') {
+                badge.className = 'badge-status pending';
+                badge.textContent = 'Pendente';
+            } else if (newStatus === 'desativado') {
+                badge.className = 'badge-status inactive';
+                badge.textContent = 'Desativado';
+            }
+            
+            // Fecha o modal
+            modalStatus.classList.remove('show');
+            
+            // Reaplica os filtros para esconder a linha caso o filtro "Ativos/Desativados" do topo esteja selecionado
+            if (typeof aplicarFiltros === 'function') {
+                aplicarFiltros();
+            }
+        }
+
+        // 3. FECHAMENTO DOS MODAIS (OS BOTÕES DE 'X')
+        document.getElementById('btnCloseX').onclick = () => modalAcesso.classList.remove('show');
+        document.getElementById('btnCancel').onclick = () => modalAcesso.classList.remove('show');
+
+        document.getElementById('btnCloseStatusX').onclick = () => modalStatus.classList.remove('show');
+
+
+        // 4. LÓGICA DOS FILTROS (PESQUISA E STATUS)
+        let filtroStatusAtual = 'todos'; 
+
         function filterTable() {
             aplicarFiltros();
         }
 
-        // Chamada quando o usuário clica nos botões de Status
         function setStatusFilter(status, el) {
-            // Atualiza a classe visual 'active' nos botões
             document.querySelectorAll('.status-option').forEach(e => e.classList.remove('active'));
             el.classList.add('active');
-            
-            // Atualiza a variável com o status escolhido
             filtroStatusAtual = status;
-            
-            // Roda a verificação nas linhas da tabela
             aplicarFiltros();
         }
 
-        // Função que verifica tanto o texto digitado quanto o status selecionado
         function aplicarFiltros() {
             const input = document.getElementById('searchInput').value.toLowerCase();
             const rows = document.querySelectorAll('.data-row');
             let hasVisibleRows = false;
 
             rows.forEach(row => {
-                // 1. Verifica se a linha corresponde à pesquisa de texto
                 const matchesText = row.innerText.toLowerCase().includes(input);
                 
-                // 2. Verifica se a linha corresponde ao filtro de status
-                // Busca a célula (td) que contém o atributo 'data-status'
                 const tdStatus = row.querySelector('[data-status]');
                 const statusDaLinha = tdStatus ? tdStatus.getAttribute('data-status') : '';
                 
@@ -313,60 +383,63 @@
                     matchesStatus = true;
                 } else if (filtroStatusAtual === 'desativados' && statusDaLinha === 'desativado') {
                     matchesStatus = true;
+                } else if (filtroStatusAtual === 'inativos' && (statusDaLinha === 'desativado' || statusDaLinha === 'inativo')) {
+                    matchesStatus = true;
                 }
 
-                // 3. A linha só será exibida se passar nos dois filtros
                 if (matchesText && matchesStatus) {
                     row.classList.remove('hidden');
-                    row.style.display = ''; // Garante que a linha volte a aparecer
+                    row.style.display = ''; 
                     hasVisibleRows = true;
                 } else {
                     row.classList.add('hidden');
-                    row.style.display = 'none'; // Esconde a linha
+                    row.style.display = 'none'; 
                 }
             });
 
-            // Mostra a mensagem de "Nenhum item encontrado" se nenhuma linha for exibida
             document.getElementById('emptyState').style.display = hasVisibleRows ? 'none' : 'flex';
         }
 
+        // 5. LÓGICA DE DISPONIBILIDADE
         let disponibilidadesData = [];
 
-    // --- ADICIONAR DISPONIBILIDADE ---
-    document.getElementById('btn-novo').addEventListener('click', () => {
-        const diaSemanaSelect = document.getElementById('dia_semana');
-        const horarioInput = document.getElementById('horario');
+        document.getElementById('btn-novo').addEventListener('click', () => {
+            const diaSemanaSelect = document.getElementById('dia_semana');
+            const horarioInput = document.getElementById('horario');
 
-        const diaSemana = diaSemanaSelect.value;
-        const horario = horarioInput.value;
+            const diaSemanaTexto = diaSemanaSelect.options[diaSemanaSelect.selectedIndex].text;
+            const diaSemanaValor = diaSemanaSelect.value;
+            const horario = horarioInput.value;
 
-        if (diaSemana && horario) {
-            disponibilidadesData.push({ diaSemana: diaSemana, horario: horario });
+            if (diaSemanaValor !== "null" && diaSemanaValor !== "" && horario) {
+                disponibilidadesData.push({ diaSemana: diaSemanaValor, horario: horario });
 
-            const lista = document.getElementById('listaDisponibilidades');
-            const listItem = document.createElement('li');
-            const textoDisplay = `✅ ${diaSemana}: ${horario}`;
-            listItem.innerHTML = `
-                <span>${textoDisplay}</span>
-                <button type="button" onclick="removeDisponibilidade(this, '${diaSemana}', '${horario}')"
-                    style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">
-                    (Remover)
-                </button>
-            `;
-            lista.appendChild(listItem);
+                const lista = document.getElementById('listaDisponibilidades');
+                const listItem = document.createElement('li');
+                
+                const textoDisplay = `✅ ${diaSemanaTexto}: ${horario}`;
+                
+                listItem.innerHTML = `
+                    <span>${textoDisplay}</span>
+                    <button type="button" onclick="removeDisponibilidade(this, '${diaSemanaValor}', '${horario}')"
+                        style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">
+                        (Remover)
+                    </button>
+                `;
+                lista.appendChild(listItem);
 
-            diaSemanaSelect.value = '';
-            horarioInput.value = '';
-        } else {
-            alert('Por favor, selecione um dia e um horário.');
+                diaSemanaSelect.value = 'null';
+                horarioInput.value = '';
+            } else {
+                alert('Por favor, selecione um dia e um horário.');
+            }
+        });
+
+        function removeDisponibilidade(button, diaValor, horario) {
+            const index = disponibilidadesData.findIndex(d => d.diaSemana === diaValor && d.horario === horario);
+            if (index > -1) disponibilidadesData.splice(index, 1);
+            button.closest('li').remove();
         }
-    });
-
-    function removeDisponibilidade(button, dia, horario) {
-        const index = disponibilidadesData.findIndex(d => d.diaSemana === dia && d.horario === horario);
-        if (index > -1) disponibilidadesData.splice(index, 1);
-        button.closest('li').remove();
-    }
     </script>
 </body>
 </html>
