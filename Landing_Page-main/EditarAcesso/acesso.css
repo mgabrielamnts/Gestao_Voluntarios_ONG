@@ -88,9 +88,9 @@ body {
 }
 .form-control:focus { border-color: var(--cor2); }
 
-.search-group { flex-grow: 1; position: relative; display: flex; flex-direction: column; }
-.search-group input { padding-left: 38px !important; }
-.search-icon {  position: absolute; left:12px; bottom:9px; color: var(--cor2); pointer-events: none; display: flex; align-items: center; }
+.search-group { flex-grow: 1; position: relative; }
+.search-group input { width: 100%; padding-left: 2.8rem; }
+.search-icon { position: absolute; left: 13px; top: 35px; color: var(--cor2); }
 
 .status-toggle {
     display: flex; background-color: #f0f4f7; border-radius: 8px;
@@ -196,56 +196,3 @@ tr.hidden { display: none; }
 .btn-cancel { background-color: var(--cor1); border: 1px solid var(--cor8); color: var(--cor5); }
 .btn-save { background-color: var(--cor4); color: var(--cor1); }
 
-/* --- Estilos do Filtro e Modal de Status --- */
-.cell-status-clickable {
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.cell-status-clickable:hover {
-    background-color: #f1f5f9; /* Realce cinza suave ao passar o mouse */
-}
-
-/* Novo estilo para o Badge Pendente */
-.badge-status.pending {
-    background-color: #fef3c7;
-    color: #d97706;
-}
-
-/* Deixa o modal de status mais compacto que o de cadastro */
-.modal-status-content {
-    max-width: 360px !important;
-}
-
-/* Container dos botões de status */
-.status-options-vertical {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-/* Botões de seleção de status */
-.btn-status-select {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    background-color: #ffffff;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-status-select:hover {
-    border-color: #cbd5e1;
-    background-color: #f8fafc;
-    transform: translateY(-1px);
-}
-
-.btn-status-select .badge-status {
-    width: 100%;
-    text-align: center;
-    padding: 6px 0;
-}
