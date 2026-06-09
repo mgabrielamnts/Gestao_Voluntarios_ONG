@@ -139,11 +139,11 @@
                             <input type="text" class="form-control" id="cep" required>
                         </div>
                         <div class="input-wrapper col-span-3">
-                            <label>Logradouro</label>
+                            <label>Logradouro <span>*</span></label>
                             <input type="text" class="form-control" id="logradouro" required>
                         </div>
                         <div class="input-wrapper">
-                            <label>Número </label>
+                            <label>Número <span>*</span></label>
                             <input type="text" class="form-control" id="numero" required>
                         </div>
                         <div class="input-wrapper col-span-2">
@@ -193,8 +193,9 @@
                 </button>
             </div>
         </div>
-        
     </div>
+
+    <!-- MODAL DE STATUS -->
     <div class="modal-overlay" id="modalStatus">
         <div class="modal-content modal-status-content">
             <div class="modal-header">
@@ -221,6 +222,7 @@
             </div>
         </div>
     </div>
+
     <script>
         lucide.createIcons();
 
@@ -270,7 +272,7 @@
                     <td class="col-email">${emailContato}</td>
                     <td class="col-nome">${v.nome}</td>
                     <td class="center-text col-perfil">Voluntário</td>
-                    <td class="center-text" data-status="${statusData}">
+                    <td class="center-text cell-status-clickable" data-status="${statusData}" data-id="${v.id}" onclick="openStatusModal(this)">
                         <span class="badge-status ${statusClass}">${statusLabel}</span>
                     </td>
                     <td class="center-text">
@@ -495,10 +497,53 @@
         }
 
         // =============================================
-        // FECHAR MODAL
+        // MODAL DE STATUS
         // =============================================
-        document.getElementById('btnCloseX').onclick = () => modal.classList.remove('show');
-        document.getElementById('btnCancel').onclick  = () => modal.classList.remove('show');
+        const modalStatusEl = document.getElementById('modalStatus');
+        let currentStatusCell = null;
+
+        function openStatusModal(cell) {
+            currentStatusCell = cell;
+            const row = cell.closest('tr');
+            const nome = row.querySelector('.col-nome').textContent;
+            document.getElementById('statusModalNome').textContent = nome;
+            modalStatusEl.classList.add('show');
+            lucide.createIcons();
+        }
+
+        async function updateVolunteerStatus(newStatus) {
+            if (!currentStatusCell) return;
+
+            const id = currentStatusCell.getAttribute('data-id');
+            const statusMap = { 'ativo': 'ATIVO', 'pendente': 'PENDENTE', 'desativado': 'DESATIVADO' };
+            const statusBackend = statusMap[newStatus];
+
+            try {
+                const patchResp = await fetch(`${API_BASE}/voluntarios/${id}/status?status=${statusBackend}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                if (!patchResp.ok) throw new Error(`Erro ${patchResp.status}`);
+
+                // Atualiza visual do badge
+                const badge = currentStatusCell.querySelector('.badge-status');
+                const labelMap = { 'ativo': 'Ativo', 'pendente': 'Pendente', 'desativado': 'Desativado' };
+                const classMap = { 'ativo': '', 'pendente': 'pending', 'desativado': 'inactive' };
+                badge.className = `badge-status ${classMap[newStatus]}`;
+                badge.textContent = labelMap[newStatus];
+                currentStatusCell.setAttribute('data-status', newStatus);
+
+                modalStatusEl.classList.remove('show');
+                aplicarFiltros();
+
+            } catch (err) {
+                alert('Erro ao alterar status. Tente novamente.');
+                console.error(err);
+            }
+        }
+
+        document.getElementById('btnCloseStatusX').onclick = () => modalStatusEl.classList.remove('show');
 
         // =============================================
         // FILTROS
@@ -549,8 +594,10 @@
         }
 
         // =============================================
-        // INICIALIZAÇÃO
+        // FECHAR MODAL
         // =============================================
+        document.getElementById('btnCloseX').onclick = () => modal.classList.remove('show');
+        document.getElementById('btnCancel').onclick  = () => modal.classList.remove('show');
         carregarVoluntarios();
     </script>
 </body>

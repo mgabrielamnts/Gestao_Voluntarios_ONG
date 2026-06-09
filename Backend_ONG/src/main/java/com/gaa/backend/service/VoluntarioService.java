@@ -1,6 +1,7 @@
 package com.gaa.backend.service;
 
 import com.gaa.backend.dto.VoluntarioRequestDTO;
+import com.gaa.backend.enums.StatusVoluntario;
 import com.gaa.backend.exception.ResourceNotFoundException;
 import com.gaa.backend.mapper.VoluntarioMapper;
 import com.gaa.backend.model.AreaAtuacao;
@@ -132,6 +133,12 @@ public class VoluntarioService {
     }
 
     @Transactional
+    public Voluntario atualizarStatus(Long id, StatusVoluntario status) {
+        Voluntario voluntario = buscarPorId(id);
+        voluntario.setStatus(status);
+        return voluntarioRepository.save(voluntario);
+    }
+
     public void deletar(Long id) {
         Voluntario voluntario = buscarPorId(id);
         voluntarioRepository.delete(voluntario);
